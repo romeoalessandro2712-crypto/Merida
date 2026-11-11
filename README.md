@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MERIDIA — concept storefront
 
-## Getting Started
+> European sensibility. Timeless design. Everyday sophistication.
 
-First, run the development server:
+A front-end-only e-commerce storefront for **MERIDIA**, a concept European accessible-premium
+menswear brand (business casual, quiet luxury). Built for a university project: realistic UX,
+mock data, no real payments and no backend.
+
+## Stack
+
+- **Next.js 16** (App Router) + **TypeScript**
+- **Tailwind CSS v4** (theme tokens in `src/app/globals.css`)
+- `next/font` for Cormorant Garamond (headlines) and Inter (body/UI)
+- Zero runtime dependencies beyond React/Next. Deployable on Vercel as-is.
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. `npm run build` produces a fully static export of every route.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where things live
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Path | What |
+| --- | --- |
+| `data/products.ts` | **The catalogue.** Products, categories, looks, prices, colours, sizes, copy (IT/EN). Edit this to change what the store sells. |
+| `src/lib/i18n.ts` | All UI strings in Italian (default) and English. |
+| `src/lib/providers.tsx` | Cart, wishlist, language and drawer state. Cart/wishlist/language persist in `localStorage`. |
+| `src/components/product/ProductImage.tsx` | The single image component. Renders a tonal placeholder until real photos exist. |
+| `src/app/` | Routes: `/`, `/shop`, `/shop/[category]`, `/new-in`, `/best-sellers`, `/collections`, `/product/[slug]`, `/checkout`, `/checkout/success`, `/info/[slug]`. |
+| `public/brand/` | The MERIDIA crest. |
 
-## Learn More
+## Adding real photography
 
-To learn more about Next.js, take a look at the following resources:
+Every image on the site goes through `<ProductImage>`. While a product colour has no `images`,
+it renders a gradient placeholder derived from the colour's hex. To use real photos, add file
+paths to the colour in `data/products.ts`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```ts
+{ id: "navy", name: { it: "Blu navy", en: "Navy" }, hex: "#1b2a44",
+  images: ["/products/ercole-navy-1.jpg", "/products/ercole-navy-2.jpg"] }
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Drop the files into `public/products/` (portrait 4:5 works best). Product cards use the first
+image; the product page gallery uses all of them. The hero, category tiles and brand story
+block take a `src` prop in the same way.
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The reviews section is intentionally filled with clearly labelled placeholders.
+- Checkout validates the form and then clears the cart and shows a mock order number. No data
+  leaves the browser.
+- Language preference is stored under `meridia:locale`, cart under `meridia:cart`, wishlist
+  under `meridia:wishlist`.
