@@ -9,6 +9,8 @@ import { BrandStory } from "@/components/home/BrandStory";
 import { Reviews } from "@/components/home/Reviews";
 import { Community } from "@/components/home/Community";
 import { Newsletter } from "@/components/home/Newsletter";
+import { QuizPromo } from "@/components/home/QuizPromo";
+import { RecentlyViewed } from "@/components/product/RecentlyViewed";
 
 export default function HomePage() {
   return (
@@ -20,8 +22,10 @@ export default function HomePage() {
       <ShopByCategory />
       <ScrollZoom />
       <CategoryTiles />
+      <QuizPromo />
       <BestSellers />
       <BrandStory />
+      <RecentlyViewed className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24" />
       <Reviews />
       <Community />
       <Newsletter />

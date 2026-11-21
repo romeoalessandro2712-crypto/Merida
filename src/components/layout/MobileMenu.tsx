@@ -27,6 +27,14 @@ export function MobileMenu() {
             <ArrowIcon className="text-taupe" />
           </Link>
         ))}
+        <Link
+          href="/quiz"
+          onClick={close}
+          className="mt-6 flex items-center justify-between border border-gold/60 bg-navy-deep px-4 py-4 text-cream"
+        >
+          <span className="font-serif text-xl">{t.quiz.nav}</span>
+          <ArrowIcon className="text-gold" />
+        </Link>
         <div className="mt-6">
           <p className="label text-taupe mb-3">{t.shop.category}</p>
           <ul className="flex flex-col">

@@ -11,7 +11,10 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { WishlistDrawer } from "@/components/cart/WishlistDrawer";
 import { Toast } from "@/components/ui/Toast";
 import { SkipLink } from "@/components/layout/SkipLink";
-import { WelcomeOffer } from "@/components/layout/WelcomeOffer";
+import { ScratchAutoOpen, ScratchModal } from "@/components/engage/ScratchModal";
+import { GiftButton } from "@/components/engage/GiftButton";
+import { ExitIntentWatcher, ExitModal } from "@/components/engage/ExitIntent";
+import { TabNudge } from "@/components/engage/TabNudge";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { RouteCurtain } from "@/components/layout/RouteCurtain";
 import { Intro } from "@/components/layout/Intro";
@@ -79,7 +82,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CartDrawer />
           <WishlistDrawer />
           <Toast />
-          <WelcomeOffer />
+          <GiftButton />
+          <ScratchAutoOpen />
+          <ScratchModal />
+          <ExitIntentWatcher />
+          <ExitModal />
+          <TabNudge />
           <SmoothScroll />
           <RouteCurtain />
         </Providers>

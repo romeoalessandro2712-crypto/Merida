@@ -204,9 +204,13 @@ export function useWishlist() {
 /* -------------------------------------------------------------------------- */
 
 export type Drawer = "cart" | "wishlist" | "menu" | "search" | null;
+export type Modal = "scratch" | "exit" | null;
 
 interface UIContextValue {
   drawer: Drawer;
+  modal: Modal;
+  openModal: (m: Exclude<Modal, null>) => void;
+  closeModal: () => void;
   open: (d: Exclude<Drawer, null>) => void;
   close: () => void;
   toast: string | null;
@@ -218,8 +222,17 @@ const UIContext = createContext<UIContextValue | null>(null);
 function UIProvider({ children }: { children: ReactNode }) {
   const [drawer, setDrawer] = useState<Drawer>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [modal, setModal] = useState<Modal>(null);
 
-  const open = useCallback((d: Exclude<Drawer, null>) => setDrawer(d), []);
+  const openModal = useCallback((m: Exclude<Modal, null>) => {
+    setDrawer(null);
+    setModal(m);
+  }, []);
+  const closeModal = useCallback(() => setModal(null), []);
+  const open = useCallback((d: Exclude<Drawer, null>) => {
+    setModal(null);
+    setDrawer(d);
+  }, []);
   const close = useCallback(() => setDrawer(null), []);
   const notify = useCallback((message: string) => setToast(message), []);
 
@@ -247,7 +260,10 @@ function UIProvider({ children }: { children: ReactNode }) {
     };
   }, [drawer]);
 
-  const value = useMemo(() => ({ drawer, open, close, toast, notify }), [drawer, open, close, toast, notify]);
+  const value = useMemo(
+    () => ({ drawer, open, close, toast, notify, modal, openModal, closeModal }),
+    [drawer, open, close, toast, notify, modal, openModal, closeModal],
+  );
   return <UIContext.Provider value={value}>{children}</UIContext.Provider>;
 }
 

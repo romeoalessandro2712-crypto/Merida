@@ -20,6 +20,7 @@ export function Footer() {
         { href: "/new-in", label: t.nav.newIn },
         { href: "/best-sellers", label: t.nav.bestSellers },
         { href: "/collections", label: t.nav.collections },
+        { href: "/quiz", label: t.quiz.nav },
       ],
     },
     {

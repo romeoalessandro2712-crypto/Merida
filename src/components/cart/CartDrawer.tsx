@@ -9,12 +9,17 @@ import { ProductImage } from "@/components/product/ProductImage";
 import { Price } from "@/components/ui/Price";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { MinusIcon, PlusIcon } from "@/components/ui/Icons";
-import { FreeShippingBar } from "./FreeShippingBar";
+import { CartRewards } from "./CartRewards";
+import { computeTotals, pct } from "@/lib/pricing";
+import { useReward } from "@/lib/engagement";
+import { formatPrice } from "@/lib/format";
 
 export function CartDrawer() {
   const { t, locale } = useT();
   const { drawer, close } = useUI();
   const { lines, subtotal, count, setQty, remove, add } = useCart();
+  const { reward, active } = useReward();
+  const totals = computeTotals(subtotal, count, active ? reward?.code : null);
 
   // Suggest pieces that go with the last item, cheapest-that-unlocks-free-shipping first.
   const suggestions = useMemo(() => {
@@ -44,12 +49,31 @@ export function CartDrawer() {
       footer={
         lines.length > 0 ? (
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <span className="label text-navy">{t.cart.subtotal}</span>
-              <Price amount={subtotal} className="font-serif text-xl text-navy" />
-            </div>
+            <dl className="mb-2 flex flex-col gap-1 text-sm">
+              <div className="flex items-center justify-between">
+                <dt className="text-charcoal/80">{t.cart.subtotal}</dt>
+                <dd className="tabular-nums">{formatPrice(subtotal, locale)}</dd>
+              </div>
+              {totals.discount > 0 && (
+                <div className="flex items-center justify-between text-olive">
+                  <dt>
+                    {totals.source === "coupon" ? `${t.tiers.codeLine} ${reward?.code}` : t.tiers.bundleLine} (-{pct(totals.rate)})
+                  </dt>
+                  <dd className="tabular-nums">−{formatPrice(totals.discount, locale)}</dd>
+                </div>
+              )}
+              <div className="flex items-center justify-between border-t border-line pt-2">
+                <dt className="label text-navy">{t.tiers.estimate}</dt>
+                <dd className="font-serif text-2xl tabular-nums text-navy">{formatPrice(totals.subtotal - totals.discount, locale)}</dd>
+              </div>
+            </dl>
             <p className="text-xs text-taupe">{t.cart.shippingNote}</p>
-            <p className="text-xs text-olive mb-4 mt-1">{t.discount.hint}</p>
+            {totals.discount > 0 && (
+              <p className="mt-1 text-xs font-medium text-olive">
+                {t.tiers.saved} {formatPrice(totals.discount, locale)}
+              </p>
+            )}
+            <div className="mb-4" />
             <ButtonLink href="/checkout" className="w-full" size="lg" onClick={close}>
               {t.cart.checkout}
             </ButtonLink>
@@ -66,7 +90,7 @@ export function CartDrawer() {
         </div>
       ) : (
         <>
-          <FreeShippingBar subtotal={subtotal} />
+          <CartRewards subtotal={subtotal} count={count} />
           <ul className="flex flex-col divide-y divide-line">
             {lines.map((l) => (
               <li key={l.key} className="flex gap-4 py-5">

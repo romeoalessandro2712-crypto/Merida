@@ -17,6 +17,9 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { cn, formatPrice } from "@/lib/format";
 import { flyToCart } from "@/lib/fly-to-cart";
+import { recordView } from "@/lib/engagement";
+import { FrequentlyBought } from "@/components/product/FrequentlyBought";
+import { RecentlyViewed } from "@/components/product/RecentlyViewed";
 
 export function ProductPageClient({ product, related }: { product: Product; related: Product[] }) {
   const { t, locale } = useT();
@@ -30,6 +33,10 @@ export function ProductPageClient({ product, related }: { product: Product; rela
   const atcRef = useRef<HTMLDivElement>(null);
   const sizeRef = useRef<HTMLDivElement>(null);
   const [showSticky, setShowSticky] = useState(false);
+
+  useEffect(() => {
+    recordView(product.id);
+  }, [product.id]);
 
   // Show the sticky mobile bar once the main "Add to cart" button scrolls out of view.
   useEffect(() => {
@@ -148,6 +155,8 @@ export function ProductPageClient({ product, related }: { product: Product; rela
               <p className="text-xs text-olive">{t.product.stock}</p>
             </div>
 
+            <FrequentlyBought product={product} colorId={color.id} size={size} />
+
             <p className="mt-8 text-[0.95rem] leading-relaxed text-charcoal/85">{product.description[locale]}</p>
 
             <div className="mt-8">
@@ -219,6 +228,8 @@ export function ProductPageClient({ product, related }: { product: Product; rela
           <ProductGrid products={related} />
         </section>
       )}
+
+      <RecentlyViewed excludeId={product.id} className="mx-auto max-w-7xl border-t border-line px-4 py-16 md:px-8 md:py-24" />
     </>
   );
 }

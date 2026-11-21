@@ -65,3 +65,10 @@ export const FilterIcon = (p: P) => (
     <path d="M4 6h16M7 12h10m-7 6h4" />
   </svg>
 );
+export const GiftIcon = (p: P) => (
+  <svg viewBox="0 0 24 24" width={18} height={18} aria-hidden="true" {...base} {...p}>
+    <rect x="3.5" y="8.5" width="17" height="4" />
+    <path d="M5 12.5V20h14v-7.5M12 8.5V20" />
+    <path d="M12 8.5S10.5 4 8 4.5 7 8.5 12 8.5Zm0 0s1.5-4.5 4-4 1 4-4 4Z" />
+  </svg>
+);

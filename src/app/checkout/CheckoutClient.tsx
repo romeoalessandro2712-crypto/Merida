@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { FREE_SHIPPING_THRESHOLD, WELCOME_CODE, WELCOME_DISCOUNT } from "@data/products";
+import { FREE_SHIPPING_THRESHOLD } from "@data/products";
+import { COUPONS, EXPRESS_SHIPPING, STANDARD_SHIPPING, computeTotals, pct } from "@/lib/pricing";
+import { useReward } from "@/lib/engagement";
 import { useCart, useT } from "@/lib/providers";
 import { cn, formatPrice } from "@/lib/format";
 import { ProductImage } from "@/components/product/ProductImage";
@@ -11,12 +13,13 @@ import { Button, ButtonLink } from "@/components/ui/Button";
 
 type Shipping = "standard" | "express";
 
-const EXPRESS_COST = 14.9;
-const STANDARD_COST = 6.9;
+const EXPRESS_COST = EXPRESS_SHIPPING;
+const STANDARD_COST = STANDARD_SHIPPING;
 
 export function CheckoutClient() {
   const { t, locale } = useT();
-  const { lines, subtotal, hydrated, clear } = useCart();
+  const { lines, subtotal, count, hydrated, clear } = useCart();
+  const { reward, active } = useReward();
   const router = useRouter();
   const [shipping, setShipping] = useState<Shipping>("standard");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -25,13 +28,16 @@ export function CheckoutClient() {
   const [discountCode, setDiscountCode] = useState<string | null>(null);
   const [codeError, setCodeError] = useState(false);
 
-  const shippingCost = shipping === "express" ? EXPRESS_COST : subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_COST;
-  const discount = discountCode ? Math.round(subtotal * WELCOME_DISCOUNT * 100) / 100 : 0;
-  const total = subtotal - discount + shippingCost;
+  // A code typed here wins over the scratch-card reward; the better of code vs. multi-piece applies.
+  const appliedCode = discountCode ?? (active && reward ? reward.code : null);
+  const totals = computeTotals(subtotal, count, appliedCode, shipping);
+  const shippingCost = totals.shipping;
+  const discount = totals.discount;
+  const total = totals.total;
 
   function applyCode() {
     const code = codeInput.trim().toUpperCase();
-    if (code === WELCOME_CODE) {
+    if (COUPONS[code]) {
       setDiscountCode(code);
       setCodeError(false);
     } else {
@@ -221,9 +227,9 @@ export function CheckoutClient() {
           <p className="mt-1.5 text-xs" aria-live="polite">
             {codeError ? (
               <span className="text-[#7a3b41]">{t.discount.invalid}</span>
-            ) : discountCode ? (
+            ) : appliedCode ? (
               <span className="text-olive">
-                {t.discount.applied}: {discountCode}
+                {t.discount.applied}: {appliedCode}
               </span>
             ) : (
               <span className="text-taupe">{t.discount.hint}</span>
@@ -237,7 +243,7 @@ export function CheckoutClient() {
             {discount > 0 && (
               <div className="flex justify-between text-olive">
                 <dt>
-                  {t.discount.line} ({discountCode})
+                  {totals.source === "coupon" ? `${t.tiers.codeLine} ${appliedCode}` : t.tiers.bundleLine} (-{pct(totals.rate)})
                 </dt>
                 <dd className="tabular-nums">−{formatPrice(discount, locale)}</dd>
               </div>
@@ -251,6 +257,11 @@ export function CheckoutClient() {
               <dd className="tabular-nums">{formatPrice(total, locale)}</dd>
             </div>
             <p className="text-xs text-taupe">{t.checkout.vat}</p>
+            {discount > 0 && (
+              <p className="text-xs font-medium text-olive">
+                {t.tiers.saved} {formatPrice(discount, locale)}
+              </p>
+            )}
           </dl>
           <Button type="submit" size="lg" className="mt-6 w-full" disabled={submitting || !hydrated}>
             {submitting ? t.common.loading : t.checkout.placeOrder}
