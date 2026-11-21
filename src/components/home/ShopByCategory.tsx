@@ -54,7 +54,7 @@ export function ShopByCategory() {
       </Reveal>
 
       <div id="shopby-panel" role="tabpanel">
-        <ProductGrid products={products} />
+        <ProductGrid key={tab} products={products} />
       </div>
 
       <div className="mt-12 flex justify-center">

@@ -12,6 +12,7 @@ export function Gallery({ color, name }: { color: ProductColor; name: string }) 
   const slides = color.images?.length ? color.images : [undefined, undefined, undefined, undefined];
   const [active, setActive] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
+  const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
   const alt = (i: number) => `${name} — ${color.name[locale]} — ${t.product.gallery} ${i + 1} ${t.product.of} ${slides.length}`;
 
   return (
@@ -34,16 +35,31 @@ export function Gallery({ color, name }: { color: ProductColor; name: string }) 
       </ul>
 
       {/* Main image (desktop) */}
-      <div className="hidden lg:block">
-        <ProductImage
+      <div
+        className="hidden cursor-zoom-in overflow-hidden lg:block"
+        onMouseMove={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          setZoom({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
+        }}
+        onMouseLeave={() => setZoom(null)}
+      >
+        <div
           key={`${color.id}-${active}`}
-          src={slides[active]}
-          alt={alt(active)}
-          tone={color.hex}
-          variant={active}
-          sizes="(min-width: 1024px) 50vw, 100vw"
-          priority
-        />
+          className="img-swap transition-transform duration-300 ease-out"
+          style={{
+            transformOrigin: zoom ? `${zoom.x}% ${zoom.y}%` : "50% 50%",
+            transform: zoom ? "scale(1.6)" : undefined,
+          }}
+        >
+          <ProductImage
+            src={slides[active]}
+            alt={alt(active)}
+            tone={color.hex}
+            variant={active}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            priority
+          />
+        </div>
       </div>
 
       {/* Mobile: horizontal snap carousel */}

@@ -11,7 +11,7 @@ export function Toast() {
       role="status"
       aria-live="polite"
       className={cn(
-        "fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 transition-all duration-400",
+        "fixed bottom-24 lg:bottom-6 left-1/2 z-[60] -translate-x-1/2 transition-all duration-400",
         toast ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3 pointer-events-none",
       )}
     >

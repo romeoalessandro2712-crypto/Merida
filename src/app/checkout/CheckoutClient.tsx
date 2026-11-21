@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { FREE_SHIPPING_THRESHOLD } from "@data/products";
+import { FREE_SHIPPING_THRESHOLD, WELCOME_CODE, WELCOME_DISCOUNT } from "@data/products";
 import { useCart, useT } from "@/lib/providers";
 import { cn, formatPrice } from "@/lib/format";
 import { ProductImage } from "@/components/product/ProductImage";
@@ -21,9 +21,24 @@ export function CheckoutClient() {
   const [shipping, setShipping] = useState<Shipping>("standard");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [codeInput, setCodeInput] = useState("");
+  const [discountCode, setDiscountCode] = useState<string | null>(null);
+  const [codeError, setCodeError] = useState(false);
 
   const shippingCost = shipping === "express" ? EXPRESS_COST : subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_COST;
-  const total = subtotal + shippingCost;
+  const discount = discountCode ? Math.round(subtotal * WELCOME_DISCOUNT * 100) / 100 : 0;
+  const total = subtotal - discount + shippingCost;
+
+  function applyCode() {
+    const code = codeInput.trim().toUpperCase();
+    if (code === WELCOME_CODE) {
+      setDiscountCode(code);
+      setCodeError(false);
+    } else {
+      setDiscountCode(null);
+      setCodeError(true);
+    }
+  }
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -178,11 +193,55 @@ export function CheckoutClient() {
               </li>
             ))}
           </ul>
+          <div className="mt-5 flex gap-2">
+            <label htmlFor="co-code" className="sr-only">
+              {t.discount.label}
+            </label>
+            <input
+              id="co-code"
+              value={codeInput}
+              onChange={(e) => {
+                setCodeInput(e.target.value);
+                setCodeError(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  applyCode();
+                }
+              }}
+              placeholder={t.discount.label}
+              aria-invalid={codeError}
+              className="h-11 min-w-0 flex-1 border border-line bg-cream px-3 text-sm uppercase text-navy placeholder:normal-case focus:border-navy focus:outline-none"
+            />
+            <Button size="sm" variant="secondary" className="h-11" onClick={applyCode}>
+              {t.discount.apply}
+            </Button>
+          </div>
+          <p className="mt-1.5 text-xs" aria-live="polite">
+            {codeError ? (
+              <span className="text-[#7a3b41]">{t.discount.invalid}</span>
+            ) : discountCode ? (
+              <span className="text-olive">
+                {t.discount.applied}: {discountCode}
+              </span>
+            ) : (
+              <span className="text-taupe">{t.discount.hint}</span>
+            )}
+          </p>
           <dl className="mt-5 flex flex-col gap-2 border-t border-line pt-4 text-sm">
             <div className="flex justify-between">
               <dt className="text-charcoal/80">{t.cart.subtotal}</dt>
               <dd className="tabular-nums">{formatPrice(subtotal, locale)}</dd>
             </div>
+            {discount > 0 && (
+              <div className="flex justify-between text-olive">
+                <dt>
+                  {t.discount.line} ({discountCode})
+                </dt>
+                <dd className="tabular-nums">−{formatPrice(discount, locale)}</dd>
+              </div>
+            )}
             <div className="flex justify-between">
               <dt className="text-charcoal/80">{t.checkout.shipping}</dt>
               <dd className="tabular-nums">{shippingCost === 0 ? t.checkout.free : formatPrice(shippingCost, locale)}</dd>

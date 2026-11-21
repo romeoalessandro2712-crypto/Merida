@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo } from "react";
+import { FREE_SHIPPING_THRESHOLD, defaultSize, getRelatedProducts } from "@data/products";
 import { useCart, useT, useUI } from "@/lib/providers";
 import { Drawer } from "@/components/ui/Drawer";
 import { ProductImage } from "@/components/product/ProductImage";
@@ -12,7 +14,20 @@ import { FreeShippingBar } from "./FreeShippingBar";
 export function CartDrawer() {
   const { t, locale } = useT();
   const { drawer, close } = useUI();
-  const { lines, subtotal, count, setQty, remove } = useCart();
+  const { lines, subtotal, count, setQty, remove, add } = useCart();
+
+  // Suggest pieces that go with the last item, cheapest-that-unlocks-free-shipping first.
+  const suggestions = useMemo(() => {
+    if (!lines.length) return [];
+    const inCart = new Set(lines.map((l) => l.productId));
+    const remaining = FREE_SHIPPING_THRESHOLD - subtotal;
+    const pool = getRelatedProducts(lines[lines.length - 1].product, 12).filter((p) => !inCart.has(p.id));
+    const sorted =
+      remaining > 0
+        ? [...pool].sort((a, b) => Number(a.price < remaining) - Number(b.price < remaining) || a.price - b.price)
+        : pool;
+    return sorted.slice(0, 3);
+  }, [lines, subtotal]);
 
   return (
     <Drawer
@@ -33,7 +48,8 @@ export function CartDrawer() {
               <span className="label text-navy">{t.cart.subtotal}</span>
               <Price amount={subtotal} className="font-serif text-xl text-navy" />
             </div>
-            <p className="text-xs text-taupe mb-4">{t.cart.shippingNote}</p>
+            <p className="text-xs text-taupe">{t.cart.shippingNote}</p>
+            <p className="text-xs text-olive mb-4 mt-1">{t.discount.hint}</p>
             <ButtonLink href="/checkout" className="w-full" size="lg" onClick={close}>
               {t.cart.checkout}
             </ButtonLink>
@@ -101,6 +117,30 @@ export function CartDrawer() {
               </li>
             ))}
           </ul>
+
+          {suggestions.length > 0 && (
+            <div className="mt-4 border-t border-line pt-5">
+              <p className="label mb-4 text-navy">{t.upsell.title}</p>
+              <ul className="grid grid-cols-3 gap-3">
+                {suggestions.map((p) => (
+                  <li key={p.id} className="flex flex-col">
+                    <Link href={`/product/${p.slug}`} onClick={close}>
+                      <ProductImage alt={p.name} tone={p.colors[0].hex} src={p.colors[0].images?.[0]} sizes="120px" monogram={false} />
+                    </Link>
+                    <p className="mt-2 line-clamp-2 text-[0.7rem] leading-tight text-navy">{p.name}</p>
+                    <Price amount={p.price} className="text-[0.7rem] text-taupe" />
+                    <button
+                      type="button"
+                      onClick={() => add(p.id, p.colors[0].id, defaultSize(p))}
+                      className="label mt-2 border border-navy py-1.5 text-[0.58rem] text-navy transition-colors hover:bg-navy hover:text-cream"
+                    >
+                      + {t.upsell.add}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </>
       )}
     </Drawer>

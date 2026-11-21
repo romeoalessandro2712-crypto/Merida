@@ -19,7 +19,7 @@ const sizes: Record<Size, string> = {
 };
 
 const baseClass =
-  "inline-flex items-center justify-center gap-2 uppercase tracking-[0.18em] font-medium transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed select-none";
+  "relative overflow-hidden btn-shine inline-flex items-center justify-center gap-2 uppercase tracking-[0.18em] font-medium transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed select-none";
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md", className = "") {
   return cn(baseClass, variants[variant], sizes[size], className);

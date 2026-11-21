@@ -11,6 +11,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { WishlistDrawer } from "@/components/cart/WishlistDrawer";
 import { Toast } from "@/components/ui/Toast";
 import { SkipLink } from "@/components/layout/SkipLink";
+import { WelcomeOffer } from "@/components/layout/WelcomeOffer";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CartDrawer />
           <WishlistDrawer />
           <Toast />
+          <WelcomeOffer />
         </Providers>
       </body>
     </html>

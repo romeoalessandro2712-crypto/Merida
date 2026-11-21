@@ -106,6 +106,7 @@ export function Header() {
             aria-label={`${t.header.cart}${count ? ` (${count})` : ""}`}
             aria-haspopup="dialog"
             aria-controls="drawer-cart"
+            data-cart-icon
             className={cn(iconBtn, "-mr-2")}
           >
             <BagIcon />

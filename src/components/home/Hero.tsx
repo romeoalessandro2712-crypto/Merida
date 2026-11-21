@@ -1,45 +1,44 @@
 "use client";
 
+import Link from "next/link";
 import { useT } from "@/lib/providers";
 import { ButtonLink } from "@/components/ui/Button";
-import { ProductImage } from "@/components/product/ProductImage";
+import { Coverflow } from "./Coverflow";
 
 export function Hero() {
   const { t } = useT();
   const [line1, line2] = t.hero.title.split("\n");
 
   return (
-    <section className="relative isolate overflow-hidden" aria-labelledby="hero-title">
-      {/* Editorial image block — swap `src` for a real campaign photo later */}
-      <ProductImage
-        alt=""
-        tone="#4a3a2e"
-        variant={2}
-        monogram={false}
-        aspect="aspect-[4/5] sm:aspect-[16/10] lg:aspect-[21/9]"
-        sizes="100vw"
-        priority
-        className="max-h-[88vh]"
-      />
+    <section aria-labelledby="hero-title" className="relative isolate overflow-hidden bg-[#2a211b] text-cream">
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-t from-charcoal/55 via-charcoal/10 to-transparent"
+        className="absolute inset-0 -z-10"
+        style={{
+          backgroundImage:
+            "radial-gradient(70% 60% at 75% 40%, rgba(181,145,106,0.38) 0%, rgba(42,33,27,0) 60%), radial-gradient(60% 55% at 5% 95%, rgba(27,42,68,0.75) 0%, rgba(42,33,27,0) 70%)",
+        }}
       />
-      <div className="absolute inset-0 flex items-end">
-        <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pb-10 md:pb-16">
-          <div className="max-w-2xl animate-fade-up">
-            <span className="label text-cream/90">{t.hero.label}</span>
-            <h1 id="hero-title" className="mt-4 font-serif text-[2.6rem] leading-[1.02] text-cream sm:text-6xl lg:text-7xl font-medium">
-              {line1}
-              <br />
-              <span className="italic font-normal">{line2}</span>
-            </h1>
-            <p className="mt-5 max-w-md text-sm leading-relaxed text-cream/85">{t.hero.subtitle}</p>
-            <ButtonLink href="/shop" variant="light" className="mt-8" size="lg">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-12 pt-10 md:px-8 lg:grid-cols-[1fr_1.15fr] lg:py-20">
+        <div className="max-w-xl">
+          <span className="label animate-fade-up text-cream/80">{t.hero.label}</span>
+          <h1 id="hero-title" className="mt-4 font-serif text-[2.6rem] font-medium leading-[1.02] sm:text-6xl lg:text-6xl xl:text-7xl">
+            <span className="block animate-fade-up [animation-delay:120ms]">{line1}</span>
+            <span className="block animate-fade-up font-normal italic [animation-delay:240ms]">{line2}</span>
+          </h1>
+          <p className="mt-5 max-w-md animate-fade-up text-sm leading-relaxed text-cream/80 [animation-delay:360ms]">
+            {t.hero.subtitle}
+          </p>
+          <div className="mt-8 flex animate-fade-up flex-wrap items-center gap-6 [animation-delay:480ms]">
+            <ButtonLink href="/shop" variant="light" size="lg">
               {t.hero.cta}
             </ButtonLink>
+            <Link href="/new-in" className="label border-b border-cream/60 pb-1 transition-colors hover:border-cream">
+              {t.nav.newIn}
+            </Link>
           </div>
         </div>
+        <Coverflow />
       </div>
     </section>
   );

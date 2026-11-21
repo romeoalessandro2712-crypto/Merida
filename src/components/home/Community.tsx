@@ -10,6 +10,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { CheckIcon } from "@/components/ui/Icons";
+import { flyToCart } from "@/lib/fly-to-cart";
+import { defaultSize } from "@data/products";
 
 export function Community() {
   const { t, locale } = useT();
@@ -17,12 +19,12 @@ export function Community() {
   const { notify } = useUI();
   const [added, setAdded] = useState<string | null>(null);
 
-  function addLook(id: string, products: Product[]) {
+  function addLook(id: string, products: Product[], source: Element) {
     for (const p of products) {
-      // Default size M (or ONE), first colour — the customer can adjust in the cart.
-      const size = p.sizes.includes("M") ? "M" : p.sizes[0];
-      add(p.id, p.colors[0].id, size);
+      // Default size M (or first in stock), first colour — the customer can adjust in the cart.
+      add(p.id, p.colors[0].id, defaultSize(p));
     }
+    flyToCart(source, products[0].colors[0].hex);
     setAdded(id);
     notify(t.community.lookAdded);
     window.setTimeout(() => setAdded(null), 1500);
@@ -80,7 +82,7 @@ export function Community() {
                   size="sm"
                   variant={added === look.id ? "chocolate" : "secondary"}
                   className="mt-3 w-full"
-                  onClick={() => addLook(look.id, products)}
+                  onClick={(e) => addLook(look.id, products, e.currentTarget)}
                 >
                   {added === look.id ? (
                     <>

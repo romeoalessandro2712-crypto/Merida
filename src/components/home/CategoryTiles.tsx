@@ -6,6 +6,7 @@ import { useT } from "@/lib/providers";
 import { ProductImage } from "@/components/product/ProductImage";
 import { Reveal } from "@/components/ui/Reveal";
 import { ArrowIcon } from "@/components/ui/Icons";
+import { Tilt } from "@/components/ui/Tilt";
 
 const TILE_SLUGS = ["knitwear", "shirts-polos", "outerwear", "trousers"] as const;
 
@@ -18,6 +19,7 @@ export function CategoryTiles() {
       <ul className="grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-4">
         {tiles.map((c, i) => (
           <Reveal as="li" key={c.slug} delay={i * 80}>
+            <Tilt max={6}>
             <Link href={`/shop/${c.slug}`} className="group relative block overflow-hidden">
               <ProductImage
                 alt={c.name[locale]}
@@ -38,6 +40,7 @@ export function CategoryTiles() {
                 </span>
               </div>
             </Link>
+            </Tilt>
           </Reveal>
         ))}
       </ul>

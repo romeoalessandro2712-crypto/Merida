@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Product, Size } from "@data/products";
 import { useCart, useT, useUI } from "@/lib/providers";
 import { cn } from "@/lib/format";
@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/Badge";
 import { Price } from "@/components/ui/Price";
 import { WishlistButton } from "./WishlistButton";
 import { PlusIcon, CheckIcon } from "@/components/ui/Icons";
+import { Tilt } from "@/components/ui/Tilt";
+import { flyToCart } from "@/lib/fly-to-cart";
 
 export function ProductCard({
   product,
@@ -29,10 +31,12 @@ export function ProductCard({
   const [colorId, setColorId] = useState(product.colors[0].id);
   const [quickOpen, setQuickOpen] = useState(false);
   const [justAdded, setJustAdded] = useState<Size | null>(null);
+  const articleRef = useRef<HTMLElement>(null);
   const color = product.colors.find((c) => c.id === colorId) ?? product.colors[0];
 
   function quickAdd(size: Size) {
     add(product.id, color.id, size);
+    flyToCart(articleRef.current?.querySelector(".tilt"), color.hex);
     setJustAdded(size);
     notify(t.product.addedToCart);
     window.setTimeout(() => {
@@ -43,10 +47,11 @@ export function ProductCard({
 
   return (
     <article
+      ref={articleRef}
       className={cn("group relative flex flex-col", className)}
       onMouseLeave={() => setQuickOpen(false)}
     >
-      <div className="relative overflow-hidden">
+      <Tilt className="overflow-hidden">
         <Link href={`/product/${product.slug}`} className="block" aria-label={product.name}>
           <ProductImage
             src={color.images?.[0]}
@@ -126,7 +131,7 @@ export function ProductCard({
         >
           <PlusIcon />
         </button>
-      </div>
+      </Tilt>
 
       <div className="mt-3 flex flex-col gap-1.5">
         <div className="flex items-start justify-between gap-3">

@@ -24,7 +24,7 @@ export function ProductGrid({
       )}
     >
       {products.map((p, i) => (
-        <li key={p.id}>
+        <li key={p.id} className="card-in" style={{ animationDelay: `${Math.min(i, 8) * 70}ms` }}>
           <ProductCard product={p} rank={ranked ? i + 1 : undefined} priority={i < 4} />
         </li>
       ))}

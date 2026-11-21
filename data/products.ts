@@ -48,6 +48,8 @@ export interface Product {
   sizes: Size[];
   /** Sizes currently out of stock (mock) */
   soldOut?: Size[];
+  /** Sizes with only a few pieces left (mock) */
+  lowStock?: Size[];
   tagline: Localized;
   description: Localized;
   details: Localized[];
@@ -148,6 +150,7 @@ export const PRODUCTS: Product[] = [
     price: 129,
     badge: "bestseller",
     bestSellerRank: 1,
+    lowStock: ["M", "L"],
     colors: [C.navy, C.camel, C.charcoal, C.cream],
     sizes: ALL,
     soldOut: ["XS"],
@@ -176,6 +179,7 @@ export const PRODUCTS: Product[] = [
     badge: "new",
     isNew: true,
     bestSellerRank: 5,
+    lowStock: ["M"],
     colors: [C.taupe, C.navy, C.forest],
     sizes: ALL,
     tagline: { it: "Morbido come una domenica mattina.", en: "As soft as a Sunday morning." },
@@ -299,6 +303,7 @@ export const PRODUCTS: Product[] = [
     price: 99,
     badge: "bestseller",
     bestSellerRank: 2,
+    lowStock: ["S"],
     colors: [C.white, C.sky, C.cream],
     sizes: ALL,
     tagline: { it: "La camicia che risolve ogni mattina.", en: "The shirt that solves every morning." },
@@ -421,6 +426,7 @@ export const PRODUCTS: Product[] = [
     price: 389,
     badge: "bestseller",
     bestSellerRank: 3,
+    lowStock: ["M"],
     colors: [C.camel, C.navy, C.charcoal],
     sizes: ALL,
     soldOut: ["XS"],
@@ -542,6 +548,7 @@ export const PRODUCTS: Product[] = [
     price: 149,
     badge: "bestseller",
     bestSellerRank: 6,
+    lowStock: ["L"],
     colors: [C.charcoal, C.navy, C.taupe],
     sizes: ALL,
     tagline: { it: "Una pince, la giusta caduta.", en: "One pleat, the right drape." },
@@ -830,6 +837,16 @@ export const LOOKS: Look[] = [
 /* ---------- Helpers ---------- */
 
 export const FREE_SHIPPING_THRESHOLD = 149;
+
+/** Welcome-offer code accepted at the mock checkout */
+export const WELCOME_CODE = "MERIDIA10";
+export const WELCOME_DISCOUNT = 0.1;
+
+/** Size used for one-tap adds: M when available, otherwise the first size in stock */
+export function defaultSize(p: Product): Size {
+  if (p.sizes.includes("M") && !p.soldOut?.includes("M")) return "M";
+  return p.sizes.find((s) => !p.soldOut?.includes(s)) ?? p.sizes[0];
+}
 
 export function getProduct(slug: string): Product | undefined {
   return PRODUCTS.find((p) => p.slug === slug);
