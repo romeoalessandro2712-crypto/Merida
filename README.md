@@ -55,3 +55,14 @@ block take a `src` prop in the same way.
   leaves the browser.
 - Language preference is stored under `meridia:locale`, cart under `meridia:cart`, wishlist
   under `meridia:wishlist`.
+
+## Publishing on GitHub Pages
+
+The repo ships with `.github/workflows/pages.yml`. After pushing to `main`:
+
+1. On GitHub, open **Settings → Pages** and set **Source** to **GitHub Actions**.
+2. Open the **Actions** tab and wait for "Deploy to GitHub Pages" to go green (about 2 minutes).
+3. The site is live at `https://<your-username>.github.io/<repo-name>/`.
+
+The workflow builds a static export with the repo name as the base path, so links and images
+resolve under that sub-folder automatically.

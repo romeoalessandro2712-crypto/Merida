@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { asset } from "@/lib/asset";
 import { useT } from "@/lib/providers";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
@@ -46,7 +47,7 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-3">
               <Image
-                src="/brand/meridia-crest-600.jpg"
+                src={asset("/brand/meridia-crest-600.jpg")}
                 alt="MERIDIA crest"
                 width={52}
                 height={52}

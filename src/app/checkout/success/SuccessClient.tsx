@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { asset } from "@/lib/asset";
 import { useSearchParams } from "next/navigation";
 import { useT } from "@/lib/providers";
 import { ButtonLink } from "@/components/ui/Button";
@@ -13,7 +14,7 @@ export function SuccessClient() {
   return (
     <div className="mx-auto max-w-xl px-4 py-20 md:py-28 text-center animate-fade-up">
       <Image
-        src="/brand/meridia-crest-600.jpg"
+        src={asset("/brand/meridia-crest-600.jpg")}
         alt="MERIDIA crest"
         width={80}
         height={80}

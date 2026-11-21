@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { asset } from "@/lib/asset";
 import { cn } from "@/lib/format";
 
 export function Wordmark({ className, withCrest = true }: { className?: string; withCrest?: boolean }) {
@@ -7,7 +8,7 @@ export function Wordmark({ className, withCrest = true }: { className?: string; 
     <Link href="/" aria-label="MERIDIA — Home" className={cn("flex items-center gap-2 md:gap-2.5 group", className)}>
       {withCrest && (
         <Image
-          src="/brand/meridia-crest-600.jpg"
+          src={asset("/brand/meridia-crest-600.jpg")}
           alt=""
           width={36}
           height={36}

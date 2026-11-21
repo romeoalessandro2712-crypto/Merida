@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { asset } from "@/lib/asset";
 import Link from "next/link";
 import { useT } from "@/lib/providers";
 import { ProductImage } from "@/components/product/ProductImage";
@@ -15,7 +16,7 @@ export function BrandStory() {
         <Reveal className="order-2 md:order-1">
           <div className="flex items-center gap-3">
             <Image
-              src="/brand/meridia-crest-600.jpg"
+              src={asset("/brand/meridia-crest-600.jpg")}
               alt="MERIDIA crest"
               width={44}
               height={44}

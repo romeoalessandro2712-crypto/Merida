@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { cn } from "@/lib/format";
+import { asset } from "@/lib/asset";
 
 /**
  * Single image component for the whole storefront.
@@ -69,7 +70,7 @@ export function ProductImage({
   return (
     <div className={cn("relative w-full overflow-hidden bg-ecru", aspect, className)}>
       {src ? (
-        <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
+        <Image src={asset(src)} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
       ) : (
         <div
           role="img"
