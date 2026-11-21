@@ -53,6 +53,7 @@ export function SearchOverlay() {
       />
       <div
         id="drawer-search"
+        data-lenis-prevent
         role="dialog"
         aria-modal="true"
         aria-label={t.header.search}

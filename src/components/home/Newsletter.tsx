@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useT } from "@/lib/providers";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
+import { Guilloche } from "@/components/brand/Guilloche";
 
 export function Newsletter() {
   const { t } = useT();
@@ -17,7 +18,10 @@ export function Newsletter() {
   }
 
   return (
-    <section className="bg-navy text-cream" aria-labelledby="newsletter-title">
+    <section className="relative isolate overflow-hidden bg-navy text-cream" aria-labelledby="newsletter-title">
+      <div className="pointer-events-none absolute -right-[20vmax] top-1/2 -z-10 w-[60vmax] -translate-y-1/2 text-gold opacity-[0.12]">
+        <Guilloche />
+      </div>
       <Reveal className="mx-auto max-w-7xl px-4 md:px-8 py-16 md:py-24 grid gap-8 md:grid-cols-2 md:items-center">
         <div>
           <h2 id="newsletter-title" className="font-serif text-3xl md:text-[2.6rem] leading-[1.1] font-medium">

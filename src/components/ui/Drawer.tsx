@@ -107,7 +107,7 @@ export function Drawer({
             <CloseIcon />
           </button>
         </header>
-        <div className="flex-1 overflow-y-auto px-6 py-6">{children}</div>
+        <div data-lenis-prevent className="flex-1 overflow-y-auto overscroll-contain px-6 py-6">{children}</div>
         {footer && <footer className="shrink-0 border-t border-line px-6 py-5">{footer}</footer>}
       </div>
     </div>

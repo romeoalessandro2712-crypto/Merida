@@ -31,17 +31,26 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const iconBtn =
-    "relative inline-flex h-10 w-10 items-center justify-center text-navy transition-colors hover:text-chocolate";
+  // On the home page the header floats transparently over the dark hero until you scroll.
+  const onDark = pathname === "/" && !solid;
+
+  const iconBtn = cn(
+    "relative inline-flex h-10 w-10 items-center justify-center transition-colors duration-500",
+    onDark ? "text-cream hover:text-gold-light" : "text-navy hover:text-chocolate",
+  );
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 transition-[background-color,border-color,backdrop-filter] duration-500 border-b",
-        solid ? "bg-cream/95 backdrop-blur border-line" : "bg-cream/70 backdrop-blur-sm border-transparent",
+        "sticky top-0 z-40 border-b transition-[background-color,border-color,backdrop-filter] duration-500",
+        onDark
+          ? "border-cream/10 bg-transparent"
+          : solid
+            ? "border-line bg-cream/95 backdrop-blur"
+            : "border-transparent bg-cream/80 backdrop-blur-sm",
       )}
     >
-      <div className="mx-auto grid h-16 md:h-[4.5rem] max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-4 md:px-8">
+      <div className="mx-auto grid h-16 md:h-20 max-w-7xl grid-cols-[1fr_auto_1fr] items-center px-4 md:px-8">
         {/* Left: nav (desktop) / hamburger (mobile) */}
         <div className="flex items-center">
           <button
@@ -63,8 +72,12 @@ export function Header() {
                   href={l.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "label py-2 transition-colors border-b border-transparent hover:border-navy",
-                    active ? "text-navy border-navy" : "text-charcoal/80 hover:text-navy",
+                    "label border-b py-2 transition-colors duration-500",
+                    onDark
+                      ? "border-transparent text-cream/85 hover:border-gold hover:text-cream"
+                      : active
+                        ? "border-navy text-navy"
+                        : "border-transparent text-charcoal/80 hover:border-navy hover:text-navy",
                   )}
                 >
                   {t.nav[l.key]}
@@ -75,11 +88,11 @@ export function Header() {
         </div>
 
         {/* Center: wordmark */}
-        <Wordmark />
+        <Wordmark light={onDark} />
 
         {/* Right: language + icons */}
         <div className="flex items-center justify-end gap-1 md:gap-2">
-          <LanguageSwitcher className="hidden lg:flex mr-4" />
+          <LanguageSwitcher className="mr-4 hidden lg:flex" light={onDark} />
           <button
             type="button"
             onClick={() => open("search")}
@@ -113,7 +126,10 @@ export function Header() {
             {hydrated && count > 0 && (
               <span
                 aria-hidden="true"
-                className="absolute -right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-navy px-1 text-[0.6rem] font-medium text-cream tabular-nums"
+                className={cn(
+                  "absolute -right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[0.6rem] font-medium tabular-nums",
+                  onDark ? "bg-gold text-navy-deep" : "bg-navy text-cream",
+                )}
               >
                 {count}
               </span>

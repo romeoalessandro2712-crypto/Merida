@@ -14,6 +14,8 @@
   --color-olive-light: #a3a68e;
   --color-line: #e2dbce;
   --color-ink: #1f1f1f;
+  --color-gold: #b89b5e;
+  --color-gold-light: #d9c28f;
 
   --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
@@ -76,6 +78,84 @@
   opacity: 1;
   transform: none;
 }
+
+/* ---------- Brand graphics ---------- */
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin 180s linear infinite; }
+.spin-60 { animation: spin 60s linear infinite; }
+.spin-rev { animation: spin 240s linear infinite reverse; }
+
+/* Drifting light blobs behind dark sections */
+@keyframes drift-a { 0%, 100% { transform: translate(-8%, -6%) scale(1); } 50% { transform: translate(10%, 8%) scale(1.18); } }
+@keyframes drift-b { 0%, 100% { transform: translate(6%, 10%) scale(1.1); } 50% { transform: translate(-12%, -4%) scale(0.95); } }
+.aurora-blob { position: absolute; border-radius: 9999px; filter: blur(90px); pointer-events: none; }
+.aurora-a { animation: drift-a 22s ease-in-out infinite; }
+.aurora-b { animation: drift-b 28s ease-in-out infinite; }
+
+/* Film grain overlay */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Crest entrance */
+@keyframes crest-in {
+  from { opacity: 0; transform: scale(0.82); filter: blur(10px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+.crest-in { animation: crest-in 1.4s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+
+/* Scroll cue line */
+@keyframes cue { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+.cue-line { animation: cue 2.2s cubic-bezier(0.76, 0, 0.24, 1) infinite; }
+
+/* ---------- Intro splash (first load per session) ---------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background: var(--color-navy-deep);
+  color: var(--color-cream);
+  animation: intro-out 0.9s cubic-bezier(0.76, 0, 0.24, 1) 1.9s forwards;
+}
+@keyframes intro-out { to { transform: translateY(-100%); visibility: hidden; } }
+@keyframes line-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes word-in { from { opacity: 0; letter-spacing: 0.7em; } to { opacity: 1; letter-spacing: 0.32em; } }
+.intro-crest { animation: crest-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.1s backwards; }
+.intro-line { animation: line-grow 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.5s backwards; }
+.intro-word { animation: word-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.6s backwards; letter-spacing: 0.32em; }
+html.intro-seen .intro { display: none; }
+
+/* ---------- Route curtain (between pages) ---------- */
+.route-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-navy-deep);
+  transform: translateY(100%);
+  visibility: hidden;
+  pointer-events: none;
+}
+.route-curtain[data-phase="cover"] { visibility: visible; pointer-events: auto; animation: curtain-in 0.55s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
+.route-curtain[data-phase="reveal"] { visibility: visible; animation: curtain-out 0.8s cubic-bezier(0.76, 0, 0.24, 1) forwards; }
+@keyframes curtain-in { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes curtain-out { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+.route-curtain .curtain-inner { opacity: 0; transition: opacity 0.3s; }
+.route-curtain[data-phase="cover"] .curtain-inner { opacity: 1; transition-delay: 0.2s; }
 
 /* ---------- 3D motion ---------- */
 
@@ -147,7 +227,8 @@
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
   .animate-marquee { animation: none; }
-  .page-enter, .card-in, .img-swap, .modal-in, .animate-fade-up { animation: none !important; }
+  .page-enter, .card-in, .img-swap, .modal-in, .animate-fade-up, .crest-in, .spin-slow, .spin-60, .spin-rev, .aurora-a, .aurora-b, .cue-line { animation: none !important; }
+  .intro, .route-curtain { display: none !important; }
   .tilt { transform: none !important; }
   .tilt-glare { display: none; }
   * { scroll-behavior: auto !important; }

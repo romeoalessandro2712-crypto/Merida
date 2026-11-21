@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/format";
+import { Ornament } from "@/components/brand/Ornament";
 
 export function SectionHeading({
   label,
@@ -27,6 +28,7 @@ export function SectionHeading({
       <div className={cn("flex flex-col gap-3", align === "center" && "items-center")}>
         {label && <span className="label text-taupe">{label}</span>}
         <h2 className="font-serif text-3xl md:text-[2.6rem] leading-[1.1] text-navy font-medium">{title}</h2>
+        {align === "center" && <Ornament className="my-1" />}
         {subtitle && <p className="max-w-xl text-sm text-taupe leading-relaxed">{subtitle}</p>}
       </div>
       {action}

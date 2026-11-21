@@ -8,6 +8,7 @@ import { useT } from "@/lib/providers";
 import { asset } from "@/lib/asset";
 import { ButtonLink } from "@/components/ui/Button";
 import { CloseIcon } from "@/components/ui/Icons";
+import { getLenis } from "@/lib/smooth-scroll";
 
 const KEY = "meridia:welcome-seen";
 
@@ -28,7 +29,7 @@ export function WelcomeOffer() {
       /* storage unavailable */
     }
     if (seen) return;
-    const id = window.setTimeout(() => setOpen(true), 6000);
+    const id = window.setTimeout(() => setOpen(true), 8000);
     return () => window.clearTimeout(id);
   }, [pathname]);
 
@@ -44,11 +45,15 @@ export function WelcomeOffer() {
   useEffect(() => {
     if (!open) return;
     closeRef.current?.focus();
+    getLenis()?.stop();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") dismiss();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      getLenis()?.start();
+    };
   }, [open]);
 
   if (!open) return null;

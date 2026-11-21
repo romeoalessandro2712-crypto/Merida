@@ -12,6 +12,9 @@ import { WishlistDrawer } from "@/components/cart/WishlistDrawer";
 import { Toast } from "@/components/ui/Toast";
 import { SkipLink } from "@/components/layout/SkipLink";
 import { WelcomeOffer } from "@/components/layout/WelcomeOffer";
+import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { RouteCurtain } from "@/components/layout/RouteCurtain";
+import { Intro } from "@/components/layout/Intro";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -51,8 +54,18 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it" className={`${cormorant.variable} ${inter.variable} h-full`}>
+    <html lang="it" className={`${cormorant.variable} ${inter.variable} h-full`} suppressHydrationWarning>
+      <head>
+        {/* Play the crest intro only on the first page load of a visit */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(sessionStorage.getItem('meridia:intro')){document.documentElement.classList.add('intro-seen')}else{sessionStorage.setItem('meridia:intro','1')}}catch(e){}",
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
+        <Intro />
         <Providers>
           <SkipLink />
           <AnnouncementBar />
@@ -67,6 +80,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <WishlistDrawer />
           <Toast />
           <WelcomeOffer />
+          <SmoothScroll />
+          <RouteCurtain />
         </Providers>
       </body>
     </html>

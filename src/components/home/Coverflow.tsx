@@ -2,26 +2,27 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getBestSellers } from "@data/products";
+import { getBestSellers, type Product } from "@data/products";
 import { useT } from "@/lib/providers";
 import { cn } from "@/lib/format";
 import { ProductImage } from "@/components/product/ProductImage";
 import { Price } from "@/components/ui/Price";
 import { ArrowIcon } from "@/components/ui/Icons";
 
-const ITEMS = getBestSellers(7);
+const DEFAULT_ITEMS = getBestSellers(7);
 
 /**
  * 3D coverflow of best sellers. Auto-rotates, pauses on hover, supports drag/swipe,
  * arrow keys and dots. Clicking a side card brings it to the front; clicking the
  * front card opens the product page.
  */
-export function Coverflow() {
+export function Coverflow({ items: ITEMS = DEFAULT_ITEMS }: { items?: Product[] }) {
   const { t, locale } = useT();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const drag = useRef<number | null>(null);
   const justDragged = useRef(false);
+  const regionRef = useRef<HTMLDivElement>(null);
   const n = ITEMS.length;
 
   const go = useCallback((d: number) => setIndex((i) => (i + d + n) % n), [n]);
@@ -36,6 +37,7 @@ export function Coverflow() {
   return (
     <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
       <div
+        ref={regionRef}
         role="region"
         aria-roledescription="carousel"
         aria-label={t.hero3d.carousel}
@@ -52,6 +54,7 @@ export function Coverflow() {
         onPointerDown={(e) => {
           drag.current = e.clientX;
           justDragged.current = false;
+          if (regionRef.current) delete regionRef.current.dataset.noTransition;
           setPaused(true);
         }}
         onPointerUp={(e) => {
@@ -59,6 +62,8 @@ export function Coverflow() {
           const dx = e.clientX - drag.current;
           drag.current = null;
           justDragged.current = Math.abs(dx) > 8;
+          // A drag must not count as a click on the card (skips the page curtain too).
+          if (justDragged.current && regionRef.current) regionRef.current.dataset.noTransition = "";
           if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
           if (e.pointerType !== "mouse") setPaused(false);
         }}
@@ -92,6 +97,7 @@ export function Coverflow() {
                 href={`/product/${p.slug}`}
                 tabIndex={off === 0 ? 0 : -1}
                 draggable={false}
+                data-no-transition={off !== 0 ? "" : undefined}
                 onClick={(e) => {
                   if (justDragged.current || off !== 0) {
                     e.preventDefault();

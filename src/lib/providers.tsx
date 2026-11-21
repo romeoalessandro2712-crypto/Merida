@@ -13,6 +13,7 @@ import {
 import { DEFAULT_LOCALE, getDictionary, type Dictionary, type Locale } from "@/lib/i18n";
 import { PRODUCTS, type Product, type Size } from "@data/products";
 import { createPersistedStore } from "./persisted-store";
+import { getLenis } from "./smooth-scroll";
 
 /* -------------------------------------------------------------------------- */
 /*                             Persisted stores                               */
@@ -234,12 +235,14 @@ function UIProvider({ children }: { children: ReactNode }) {
     if (!drawer) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    getLenis()?.stop();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setDrawer(null);
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
+      getLenis()?.start();
       window.removeEventListener("keydown", onKey);
     };
   }, [drawer]);
