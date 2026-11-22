@@ -10,14 +10,14 @@ import { ArrowIcon } from "@/components/ui/Icons";
 
 export function BestSellers() {
   const { t } = useT();
-  const products = getBestSellers(8);
+  const products = getBestSellers(5);
   return (
     <section className="border-t border-line bg-ecru/60 py-16 md:py-24" aria-labelledby="best-title">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <Reveal>
           <SectionHeading
             align="left"
-            label="01 — 08"
+            label={`01 — ${String(products.length).padStart(2, "0")}`}
             title={<span id="best-title">{t.best.title}</span>}
             subtitle={t.best.subtitle}
             action={
@@ -28,7 +28,7 @@ export function BestSellers() {
             }
           />
         </Reveal>
-        <ProductGrid products={products} ranked />
+        <ProductGrid products={products} ranked columns={5} />
       </div>
     </section>
   );

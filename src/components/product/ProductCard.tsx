@@ -57,9 +57,24 @@ export function ProductCard({
             src={color.images?.[0]}
             alt={`${product.name} — ${color.name[locale]}`}
             tone={color.hex}
+            art={product.art}
+            stripe={color.stripe}
             priority={priority}
+            monogram={false}
             className="transition-transform duration-700 ease-out group-hover:scale-[1.03]"
           />
+          {/* Second view (detail) fades in on hover, like a second product photo */}
+          <div aria-hidden="true" className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
+            <ProductImage
+              src={color.images?.[1]}
+              alt=""
+              tone={color.hex}
+              art={product.art}
+              stripe={color.stripe}
+              variant={1}
+              monogram={false}
+            />
+          </div>
         </Link>
 
         {/* Badges / rank */}
@@ -135,7 +150,7 @@ export function ProductCard({
 
       <div className="mt-3 flex flex-col gap-1.5">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-sans text-[0.9rem] leading-snug text-navy">
+          <h3 className="font-serif text-[1.15rem] leading-snug text-navy">
             <Link href={`/product/${product.slug}`} className="hover:underline underline-offset-4">
               {product.name}
             </Link>

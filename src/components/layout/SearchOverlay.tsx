@@ -99,7 +99,7 @@ export function SearchOverlay() {
                   {results.map((p) => (
                     <li key={p.id}>
                       <Link href={`/product/${p.slug}`} onClick={handleClose} className="group block">
-                        <ProductImage alt={p.name} tone={p.colors[0].hex} className="mb-2" sizes="25vw" />
+                        <ProductImage alt={p.name} art={p.art} stripe={p.colors[0].stripe} tone={p.colors[0].hex} className="mb-2" sizes="25vw" />
                         <p className="text-sm text-navy group-hover:underline underline-offset-4">{p.name}</p>
                         <Price amount={p.price} className="text-xs text-taupe" />
                       </Link>

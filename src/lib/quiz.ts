@@ -1,18 +1,14 @@
-import { PRODUCTS, type CategorySlug, type Product } from "@data/products";
+import { getProduct, type Product } from "@data/products";
 
 export type Occasion = "office" | "weekend" | "evening";
 export type Palette = "navy" | "earth" | "green";
 export type Fit = "classic" | "relaxed";
 
+/** Colour ids that belong to each palette answer (first match wins). */
 const PALETTES: Record<Palette, string[]> = {
-  navy: ["navy", "charcoal", "sky", "white", "black"],
-  earth: ["camel", "chocolate", "sand", "taupe", "stone", "cream"],
-  green: ["olive", "forest", "cream", "sand"],
-};
-const OCCASION_TAGS: Record<Occasion, string[]> = {
-  office: ["office"],
-  weekend: ["weekend", "cotton"],
-  evening: ["winter", "merino", "wool", "silk"],
+  navy: ["navy", "sky", "white"],
+  earth: ["sand", "cream", "chocolate"],
+  green: ["olive", "cream", "sand"],
 };
 
 export interface LookItem {
@@ -20,23 +16,27 @@ export interface LookItem {
   colorId: string;
 }
 
-/** Picks one piece per slot (outer layer, top, trousers, accessory) that best matches the answers. */
+/**
+ * Builds a 3-piece look from the capsule:
+ * - city: shirt (classic) or polo (relaxed) + bracelet + sweater (classic) or cap (relaxed)
+ * - seaside: polo + cap + bracelet
+ * - evening: sweater + shirt + bracelet
+ */
 export function buildLook(occasion: Occasion, palette: Palette, fit: Fit): LookItem[] {
-  const slots: CategorySlug[] = ["outerwear", fit === "relaxed" ? "knitwear" : "shirts-polos", "trousers", "accessories"];
-  const tags = [...OCCASION_TAGS[occasion], fit === "classic" ? "office" : "weekend"];
-  const colors = PALETTES[palette];
-
-  return slots.map((slot) => {
-    let best: LookItem | null = null;
-    let bestScore = -1;
-    for (const p of PRODUCTS.filter((x) => x.category === slot)) {
-      const match = p.colors.find((c) => colors.includes(c.id));
-      const score = p.tags.filter((tg) => tags.includes(tg)).length * 2 + (match ? 3 : 0) + (p.bestSellerRank ? 0.5 : 0);
-      if (score > bestScore) {
-        bestScore = score;
-        best = { product: p, colorId: (match ?? p.colors[0]).id };
-      }
-    }
-    return best!;
-  });
+  const slugs: Record<Occasion, string[]> = {
+    office:
+      fit === "classic"
+        ? ["amalfi-striped-linen-shirt", "sorrento-linen-sweater", "capri-braided-bracelet"]
+        : ["portofino-striped-polo", "riviera-cotton-cap", "capri-braided-bracelet"],
+    weekend: ["portofino-striped-polo", "riviera-cotton-cap", "capri-braided-bracelet"],
+    evening: ["sorrento-linen-sweater", "amalfi-striped-linen-shirt", "capri-braided-bracelet"],
+  };
+  const want = PALETTES[palette];
+  return slugs[occasion]
+    .map((s) => getProduct(s))
+    .filter((p): p is Product => Boolean(p))
+    .map((product) => {
+      const match = want.map((id) => product.colors.find((c) => c.id === id)).find(Boolean);
+      return { product, colorId: (match ?? product.colors[0]).id };
+    });
 }

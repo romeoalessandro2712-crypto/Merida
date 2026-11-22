@@ -57,7 +57,8 @@ export function FrequentlyBought({ product, colorId, size }: { product: Product;
       <ul className="flex items-start gap-2">
         {items.map((p, i) => {
           const on = isOn(p);
-          const tone = p.id === product.id ? (product.colors.find((c) => c.id === colorId)?.hex ?? p.colors[0].hex) : p.colors[0].hex;
+          const col = (p.id === product.id ? product.colors.find((c) => c.id === colorId) : undefined) ?? p.colors[0];
+          const tone = col.hex;
           return (
             <li key={p.id} className="flex flex-1 items-start gap-2">
               {i > 0 && (
@@ -67,7 +68,7 @@ export function FrequentlyBought({ product, colorId, size }: { product: Product;
               )}
               <div className={cn("flex-1 transition-opacity", !on && "opacity-40")}>
                 <Link href={`/product/${p.slug}`} className="block">
-                  <ProductImage alt={p.name} tone={tone} sizes="120px" monogram={false} />
+                  <ProductImage alt={p.name} art={p.art} stripe={col.stripe} tone={tone} sizes="120px" monogram={false} />
                 </Link>
                 <label className="mt-2 flex cursor-pointer items-start gap-1.5 text-[0.7rem] leading-tight text-navy">
                   <input

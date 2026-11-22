@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { useId } from "react";
+import { Garment, type ArtKind } from "./garments";
 import { cn } from "@/lib/format";
 import { asset } from "@/lib/asset";
 
@@ -26,7 +28,21 @@ export interface ProductImageProps {
   priority?: boolean;
   /** Show a faint monogram watermark on placeholders */
   monogram?: boolean;
+  /** Draw this garment on a studio backdrop instead of a flat tonal block */
+  art?: ArtKind;
+  /** Second colour for striped pieces */
+  stripe?: string;
 }
+
+/** Soft "photo studio" backdrops, one per gallery variant. */
+const STUDIO = [
+  "radial-gradient(120% 90% at 50% 35%, #f8f4ec 0%, #ece3d4 60%, #ddd0bb 100%)",
+  "radial-gradient(120% 90% at 50% 30%, #f6efe2 0%, #e8dcc7 60%, #d6c5a8 100%)",
+  "radial-gradient(120% 90% at 50% 35%, #f1f2ee 0%, #e2e3dc 60%, #cfd1c8 100%)",
+  "radial-gradient(120% 90% at 50% 40%, #f5efe6 0%, #e7dccb 60%, #d8c9b1 100%)",
+];
+/** Framing per variant: full piece, detail close-up, slight turn, mirrored. */
+const FRAMING = ["", "translate(-62 -24) scale(1.62)", "rotate(-5 100 125) translate(4 6) scale(0.96)", "translate(200 0) scale(-1 1)"];
 
 function hexToRgb(hex: string): [number, number, number] {
   const h = hex.replace("#", "");
@@ -66,11 +82,29 @@ export function ProductImage({
   sizes = "(min-width: 1024px) 25vw, 50vw",
   priority,
   monogram = true,
+  art,
+  stripe,
 }: ProductImageProps) {
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   return (
     <div className={cn("relative w-full overflow-hidden bg-ecru", aspect, className)}>
       {src ? (
         <Image src={asset(src)} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
+      ) : art ? (
+        <div role="img" aria-label={alt} className="absolute inset-0" style={{ background: STUDIO[variant % STUDIO.length] }}>
+          <svg viewBox="0 0 200 250" preserveAspectRatio="xMidYMid meet" className="absolute inset-0 h-full w-full" aria-hidden="true">
+            <defs>
+              <radialGradient id={`${uid}-floor`}>
+                <stop offset="0" stopColor="#3a2c20" stopOpacity="0.22" />
+                <stop offset="1" stopColor="#3a2c20" stopOpacity="0" />
+              </radialGradient>
+            </defs>
+            <g transform={FRAMING[variant % FRAMING.length] || undefined}>
+              <ellipse cx="100" cy={art === "bracelet" ? 168 : art === "cap" ? 192 : 226} rx="78" ry="9" fill={`url(#${uid}-floor)`} />
+              <Garment kind={art} tone={tone} stripe={stripe} id={uid} />
+            </g>
+          </svg>
+        </div>
       ) : (
         <div
           role="img"

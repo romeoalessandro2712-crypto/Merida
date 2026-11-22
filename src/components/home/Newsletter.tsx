@@ -18,7 +18,7 @@ export function Newsletter() {
   }
 
   return (
-    <section className="relative isolate overflow-hidden bg-navy text-cream" aria-labelledby="newsletter-title">
+    <section className="relative isolate overflow-clip bg-navy text-cream" aria-labelledby="newsletter-title">
       <div className="pointer-events-none absolute -right-[20vmax] top-1/2 -z-10 w-[60vmax] -translate-y-1/2 text-gold opacity-[0.12]">
         <Guilloche />
       </div>

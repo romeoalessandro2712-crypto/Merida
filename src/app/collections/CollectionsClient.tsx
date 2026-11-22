@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CATEGORIES } from "@data/products";
+import { CATEGORIES, PRODUCTS } from "@data/products";
 import { useT } from "@/lib/providers";
 import { ProductImage } from "@/components/product/ProductImage";
 import { Reveal } from "@/components/ui/Reveal";
@@ -29,14 +29,16 @@ export function CollectionsClient() {
               <Link href={`/shop/${c.slug}`} className="group relative block overflow-hidden">
                 <ProductImage
                   alt={c.name[locale]}
-                  tone={c.tone}
-                  variant={i}
+                  tone={PRODUCTS.find((p) => p.category === c.slug)?.colors[0].hex ?? c.tone}
+                  art={PRODUCTS.find((p) => p.category === c.slug)?.art}
+                  stripe={PRODUCTS.find((p) => p.category === c.slug)?.colors[0].stripe}
+                  variant={i === 1 ? 2 : i}
                   aspect="aspect-[5/4]"
                   sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                   monogram={false}
                   className="transition-transform duration-700 group-hover:scale-[1.03]"
                 />
-                <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-charcoal/55 to-transparent" />
+                <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/25 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-6 text-cream">
                   <h2 className="font-serif text-3xl font-medium">{c.name[locale]}</h2>
                   <p className="mt-1 text-xs text-cream/80">{c.blurb[locale]}</p>

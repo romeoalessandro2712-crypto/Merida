@@ -95,7 +95,7 @@ export function ProductPageClient({ product, related }: { product: Product; rela
         </nav>
 
         <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
-          <Gallery color={color} name={product.name} />
+          <Gallery color={color} name={product.name} art={product.art} />
 
           <div className="lg:sticky lg:top-28 lg:self-start">
             {product.badge && <Badge kind={product.badge} className="mb-4 inline-block border border-line" />}

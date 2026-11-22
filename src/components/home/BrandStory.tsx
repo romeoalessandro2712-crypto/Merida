@@ -13,7 +13,7 @@ import { Tilt } from "@/components/ui/Tilt";
 export function BrandStory() {
   const { t } = useT();
   return (
-    <section aria-labelledby="story-title" className="grain relative isolate overflow-hidden bg-navy-deep py-20 text-cream md:py-32">
+    <section aria-labelledby="story-title" className="grain relative isolate overflow-clip bg-navy-deep py-20 text-cream md:py-32">
       <Aurora />
       <div className="pointer-events-none absolute -left-[25vmax] top-1/2 -z-10 w-[75vmax] -translate-y-1/2 text-gold opacity-[0.12]">
         <Guilloche />
@@ -39,7 +39,7 @@ export function BrandStory() {
           <div className="relative">
             <span aria-hidden="true" className="absolute inset-0 translate-x-4 translate-y-4 border border-gold/50 md:translate-x-6 md:translate-y-6" />
             <Tilt max={5}>
-              <ProductImage alt="" tone="#8c7a66" variant={3} sizes="(min-width: 768px) 50vw, 100vw" monogram={false} />
+              <ProductImage alt="" art="shirt" tone="#f2efe8" stripe="#7f9bb8" variant={3} sizes="(min-width: 768px) 50vw, 100vw" monogram={false} />
             </Tilt>
           </div>
         </Reveal>

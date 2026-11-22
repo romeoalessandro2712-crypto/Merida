@@ -1,6 +1,6 @@
 "use client";
 
-import { getNewIn } from "@data/products";
+import { PRODUCTS } from "@data/products";
 import { useT } from "@/lib/providers";
 import { Aurora } from "@/components/brand/Aurora";
 import { Guilloche } from "@/components/brand/Guilloche";
@@ -8,13 +8,13 @@ import { Ornament } from "@/components/brand/Ornament";
 import { Reveal } from "@/components/ui/Reveal";
 import { Coverflow } from "./Coverflow";
 
-const ITEMS = getNewIn();
+const ITEMS = PRODUCTS;
 
 /** Dark band with the 3D carousel of the season's new pieces. */
 export function FeaturedCarousel() {
   const { t } = useT();
   return (
-    <section aria-labelledby="featured-title" className="grain relative isolate overflow-hidden bg-[#1e1712] py-20 text-cream md:py-28">
+    <section aria-labelledby="featured-title" className="grain relative isolate overflow-clip bg-[#1e1712] py-20 text-cream md:py-28">
       <Aurora variant="chocolate" />
       <div className="pointer-events-none absolute -right-[30vmax] top-1/2 -z-10 w-[80vmax] -translate-y-1/2 text-gold opacity-[0.1]">
         <Guilloche spin="rev" />

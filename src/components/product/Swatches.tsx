@@ -43,7 +43,12 @@ export function Swatches({
           >
             <span
               className={cn("block rounded-full border border-black/10", size === "sm" ? "h-3.5 w-3.5" : "h-6 w-6")}
-              style={{ backgroundColor: c.hex }}
+              style={{
+                backgroundColor: c.hex,
+                backgroundImage: c.stripe
+                  ? `repeating-linear-gradient(0deg, ${c.hex} 0 2px, ${c.stripe} 2px 4px)`
+                  : undefined,
+              }}
             />
           </button>
         );

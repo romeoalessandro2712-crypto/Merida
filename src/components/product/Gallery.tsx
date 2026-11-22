@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import type { ProductColor } from "@data/products";
+import type { ArtKind } from "./garments";
 import { ProductImage } from "./ProductImage";
 import { cn } from "@/lib/format";
 import { useT } from "@/lib/providers";
 
 /** Gallery: real images when `color.images` is set, otherwise 4 tonal variants. */
-export function Gallery({ color, name }: { color: ProductColor; name: string }) {
+export function Gallery({ color, name, art }: { color: ProductColor; name: string; art?: ArtKind }) {
   const { t, locale } = useT();
   const slides = color.images?.length ? color.images : [undefined, undefined, undefined, undefined];
   const [active, setActive] = useState(0);
@@ -28,7 +29,7 @@ export function Gallery({ color, name }: { color: ProductColor; name: string }) 
               aria-current={active === i}
               className={cn("block w-full border transition-colors", active === i ? "border-navy" : "border-transparent hover:border-line")}
             >
-              <ProductImage src={src} alt="" tone={color.hex} variant={i} sizes="72px" monogram={false} />
+              <ProductImage src={src} alt="" art={art} stripe={color.stripe} tone={color.hex} variant={i} sizes="72px" monogram={false} />
             </button>
           </li>
         ))}
@@ -54,7 +55,7 @@ export function Gallery({ color, name }: { color: ProductColor; name: string }) 
           <ProductImage
             src={slides[active]}
             alt={alt(active)}
-            tone={color.hex}
+            art={art} stripe={color.stripe} tone={color.hex}
             variant={active}
             sizes="(min-width: 1024px) 50vw, 100vw"
             priority
@@ -74,7 +75,7 @@ export function Gallery({ color, name }: { color: ProductColor; name: string }) 
         >
           {slides.map((src, i) => (
             <li key={i} className="w-full shrink-0 snap-center">
-              <ProductImage src={src} alt={alt(i)} tone={color.hex} variant={i} sizes="100vw" priority={i === 0} />
+              <ProductImage src={src} alt={alt(i)} art={art} stripe={color.stripe} tone={color.hex} variant={i} sizes="100vw" priority={i === 0} />
             </li>
           ))}
         </ul>

@@ -43,7 +43,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="grain relative mt-24 isolate overflow-hidden border-t border-gold/30 bg-navy-deep text-cream">
+    <footer className="grain relative mt-24 isolate overflow-clip border-t border-gold/30 bg-navy-deep text-cream">
       <div className="pointer-events-none absolute left-1/2 top-0 -z-10 w-[90vmax] -translate-x-1/2 -translate-y-1/2 text-gold opacity-[0.08]">
         <Guilloche spin="rev" />
       </div>

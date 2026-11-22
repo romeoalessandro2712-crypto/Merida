@@ -95,7 +95,7 @@ export function CartDrawer() {
             {lines.map((l) => (
               <li key={l.key} className="flex gap-4 py-5">
                 <Link href={`/product/${l.product.slug}`} onClick={close} className="w-20 shrink-0">
-                  <ProductImage alt={l.product.name} tone={l.color.hex} src={l.color.images?.[0]} sizes="80px" monogram={false} />
+                  <ProductImage alt={l.product.name} art={l.product.art} stripe={l.color.stripe} tone={l.color.hex} src={l.color.images?.[0]} sizes="80px" monogram={false} />
                 </Link>
                 <div className="flex flex-1 flex-col">
                   <div className="flex items-start justify-between gap-3">
@@ -149,7 +149,7 @@ export function CartDrawer() {
                 {suggestions.map((p) => (
                   <li key={p.id} className="flex flex-col">
                     <Link href={`/product/${p.slug}`} onClick={close}>
-                      <ProductImage alt={p.name} tone={p.colors[0].hex} src={p.colors[0].images?.[0]} sizes="120px" monogram={false} />
+                      <ProductImage alt={p.name} art={p.art} stripe={p.colors[0].stripe} tone={p.colors[0].hex} src={p.colors[0].images?.[0]} sizes="120px" monogram={false} />
                     </Link>
                     <p className="mt-2 line-clamp-2 text-[0.7rem] leading-tight text-navy">{p.name}</p>
                     <Price amount={p.price} className="text-[0.7rem] text-taupe" />

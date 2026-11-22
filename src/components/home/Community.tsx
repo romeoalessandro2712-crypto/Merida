@@ -39,13 +39,17 @@ export function Community() {
         {LOOKS.map((look, i) => {
           const products = look.products.map(getProduct).filter((p): p is Product => Boolean(p));
           const total = products.reduce((n, p) => n + p.price, 0);
+          // Hero colour follows the look's mood colour when the piece comes in it.
+          const hero = products[0].colors.find((c) => c.hex === look.tone) ?? products[0].colors[0];
           return (
             <Reveal as="li" key={look.id} delay={i * 80} className="w-[72vw] shrink-0 snap-start sm:w-[46vw] md:w-auto">
               <div className="group relative overflow-hidden">
                 <ProductImage
                   alt={look.title[locale]}
-                  tone={look.tone}
-                  variant={i}
+                  tone={hero.hex}
+                  art={products[0].art}
+                  stripe={hero.stripe}
+                  variant={[0, 2, 3, 0][i % 4]}
                   sizes="(min-width: 768px) 25vw, 72vw"
                   className="transition-transform duration-700 group-hover:scale-[1.03]"
                   monogram={false}

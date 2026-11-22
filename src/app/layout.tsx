@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     template: "%s · MERIDIA",
   },
   description:
-    "MERIDIA is a concept European accessible-premium clothing brand: business casual essentials with a quiet, timeless sensibility. Autumn/Winter 26 available now.",
+    "MERIDIA is a concept European accessible-premium clothing brand: business casual essentials with a quiet, timeless sensibility. Spring/Summer 27 capsule available now.",
   openGraph: {
     title: "MERIDIA",
     description: "European sensibility. Timeless design. Everyday sophistication.",

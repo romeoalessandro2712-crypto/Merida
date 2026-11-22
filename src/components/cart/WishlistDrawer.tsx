@@ -45,7 +45,7 @@ export function WishlistDrawer() {
             return (
               <li key={p.id} className="flex gap-4 py-5">
                 <Link href={`/product/${p.slug}`} onClick={close} className="w-20 shrink-0">
-                  <ProductImage alt={p.name} tone={p.colors[0].hex} src={p.colors[0].images?.[0]} sizes="80px" monogram={false} />
+                  <ProductImage alt={p.name} art={p.art} stripe={p.colors[0].stripe} tone={p.colors[0].hex} src={p.colors[0].images?.[0]} sizes="80px" monogram={false} />
                 </Link>
                 <div className="flex flex-1 flex-col gap-2">
                   <div className="flex items-start justify-between gap-3">

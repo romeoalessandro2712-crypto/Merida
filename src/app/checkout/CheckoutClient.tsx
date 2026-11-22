@@ -187,7 +187,7 @@ export function CheckoutClient() {
             {lines.map((l) => (
               <li key={l.key} className="flex items-center gap-3 py-3">
                 <div className="w-14 shrink-0">
-                  <ProductImage alt={l.product.name} tone={l.color.hex} src={l.color.images?.[0]} sizes="56px" monogram={false} />
+                  <ProductImage alt={l.product.name} art={l.product.art} stripe={l.color.stripe} tone={l.color.hex} src={l.color.images?.[0]} sizes="56px" monogram={false} />
                 </div>
                 <div className="flex-1 text-sm">
                   <p className="text-navy">{l.product.name}</p>

@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getBestSellers, type Product } from "@data/products";
+import { PRODUCTS, type Product } from "@data/products";
 import { useT } from "@/lib/providers";
 import { cn } from "@/lib/format";
 import { ProductImage } from "@/components/product/ProductImage";
 import { Price } from "@/components/ui/Price";
 import { ArrowIcon } from "@/components/ui/Icons";
 
-const DEFAULT_ITEMS = getBestSellers(7);
+const DEFAULT_ITEMS = PRODUCTS;
 
 /**
  * 3D coverflow of best sellers. Auto-rotates, pauses on hover, supports drag/swipe,
@@ -109,6 +109,9 @@ export function Coverflow({ items: ITEMS = DEFAULT_ITEMS }: { items?: Product[] 
                 <ProductImage
                   alt={`${p.name} — ${color.name[locale]}`}
                   tone={color.hex}
+                  art={p.art}
+                  stripe={color.stripe}
+                  monogram={false}
                   src={color.images?.[0]}
                   sizes="280px"
                   priority={i === 0}

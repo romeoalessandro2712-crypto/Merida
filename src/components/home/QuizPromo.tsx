@@ -14,7 +14,7 @@ export function QuizPromo() {
       <Reveal>
         <Link
           href="/quiz"
-          className="grain group relative isolate flex flex-col items-center gap-8 overflow-hidden border border-gold/40 bg-navy-deep px-6 py-12 text-center text-cream md:flex-row md:px-14 md:text-left"
+          className="grain group relative isolate flex flex-col items-center gap-8 overflow-clip border border-gold/40 bg-navy-deep px-6 py-12 text-center text-cream md:flex-row md:px-14 md:text-left"
         >
           <div className="pointer-events-none absolute -right-[15%] top-1/2 -z-10 w-[700px] -translate-y-1/2 text-gold opacity-[0.14]">
             <Guilloche spin="rev" />

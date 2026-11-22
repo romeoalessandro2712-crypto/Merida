@@ -19,8 +19,8 @@ import { ArrowIcon, CheckIcon } from "@/components/ui/Icons";
 type Answers = { occasion?: Occasion; palette?: Palette; fit?: Fit };
 
 const SWATCHES: Record<Palette, string[]> = {
-  navy: ["#1b2a44", "#3a3a3a", "#b9c7d6"],
-  earth: ["#b5916a", "#4a3326", "#d3c3a4"],
+  navy: ["#1b2a44", "#7f9bb8", "#f2efe8"],
+  earth: ["#d3c3a4", "#ece4d3", "#7a5236"],
   green: ["#6b705c", "#3c4a3e", "#ece4d3"],
 };
 
@@ -58,7 +58,7 @@ export function QuizClient() {
   }
 
   return (
-    <section className="grain relative isolate -mb-24 min-h-[85svh] overflow-hidden bg-navy-deep pb-24 text-cream">
+    <section className="grain relative isolate -mb-24 min-h-[85svh] overflow-clip bg-navy-deep pb-24 text-cream">
       <Aurora />
       <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 w-[130vmax] -translate-x-1/2 -translate-y-1/2 text-gold opacity-[0.1]">
         <Guilloche />
@@ -135,14 +135,14 @@ export function QuizClient() {
                 <h1 className="mt-3 font-serif text-4xl font-medium md:text-6xl">{t.quiz.resultTitle}</h1>
                 <Ornament className="mt-5" />
               </div>
-              <ul className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+              <ul className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-4 md:grid-cols-3">
                 {look.map((i, n) => {
                   const c = i.product.colors.find((x) => x.id === i.colorId) ?? i.product.colors[0];
                   return (
                     <li key={i.product.id} className="card-in" style={{ animationDelay: `${n * 90}ms` }}>
                       <Link href={`/product/${i.product.slug}`} className="group block">
                         <div className="overflow-hidden border border-gold/30">
-                          <ProductImage alt={`${i.product.name} — ${c.name[locale]}`} tone={c.hex} src={c.images?.[0]} sizes="25vw" className="transition-transform duration-700 group-hover:scale-[1.04]" />
+                          <ProductImage alt={`${i.product.name} — ${c.name[locale]}`} art={i.product.art} stripe={c.stripe} tone={c.hex} src={c.images?.[0]} sizes="25vw" className="transition-transform duration-700 group-hover:scale-[1.04]" />
                         </div>
                         <p className="mt-3 text-sm">{i.product.name}</p>
                         <p className="text-xs text-cream/60">

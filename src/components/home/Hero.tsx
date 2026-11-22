@@ -19,7 +19,7 @@ export function Hero() {
     <section
       ref={ref}
       aria-labelledby="hero-title"
-      className="grain relative isolate -mt-[65px] flex min-h-[100svh] items-center justify-center overflow-hidden bg-navy-deep text-cream md:-mt-[81px]"
+      className="grain relative isolate -mt-[65px] flex min-h-[100svh] items-center justify-center overflow-clip bg-navy-deep text-cream md:-mt-[81px]"
     >
       <Aurora />
       <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 w-[150vmax] -translate-x-1/2 -translate-y-1/2 text-gold opacity-[0.13] md:w-[110vmax]">
