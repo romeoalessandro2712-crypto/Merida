@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { deliveryWindow, formatDay } from "@/lib/delivery";
 import { FREE_SHIPPING_THRESHOLD } from "@data/products";
 import { COUPONS, EXPRESS_SHIPPING, STANDARD_SHIPPING, computeTotals, pct } from "@/lib/pricing";
-import { useReward } from "@/lib/engagement";
+import { detailsStore, ordersStore, useNow, useReward, useSavedDetails, type SavedOrder } from "@/lib/engagement";
 import { useCart, useT } from "@/lib/providers";
 import { cn, formatPrice } from "@/lib/format";
 import { ProductImage } from "@/components/product/ProductImage";
@@ -15,6 +16,14 @@ type Shipping = "standard" | "express";
 
 const EXPRESS_COST = EXPRESS_SHIPPING;
 const STANDARD_COST = STANDARD_SHIPPING;
+
+/** Creates the order number and stores the order locally (demo) for the tracking page. */
+function saveOrder(express: boolean, total: number, items: SavedOrder["items"]): string {
+  const now = Date.now();
+  const id = `MRD-${now.toString(36).toUpperCase().slice(-6)}`;
+  ordersStore.set((prev) => [{ id, placedAt: now, express, total, items }, ...prev].slice(0, 10));
+  return id;
+}
 
 export function CheckoutClient() {
   const { t, locale } = useT();
@@ -27,6 +36,10 @@ export function CheckoutClient() {
   const [codeInput, setCodeInput] = useState("");
   const [discountCode, setDiscountCode] = useState<string | null>(null);
   const [codeError, setCodeError] = useState(false);
+  const saved = useSavedDetails();
+  const [remember, setRemember] = useState(true);
+  const [addressDone, setAddressDone] = useState(false);
+  const now = useNow(60_000);
 
   // A code typed here wins over the scratch-card reward; the better of code vs. multi-piece applies.
   const appliedCode = discountCode ?? (active && reward ? reward.code : null);
@@ -46,28 +59,94 @@ export function CheckoutClient() {
     }
   }
 
+  const ADDRESS_FIELDS = ["email", "firstName", "lastName", "address", "city", "zip", "country"];
+  const PAYMENT_FIELDS = ["cardNumber", "expiry", "cvc", "nameOnCard"];
+
+  function fieldError(name: string, value: string): string | undefined {
+    const v = value.trim();
+    if (name === "phone") return undefined;
+    if (!v) return t.checkout.required;
+    if (name === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return t.checkout.invalidEmail;
+    return undefined;
+  }
+
+  /** Validate a field when the visitor leaves it, and clear the error as soon as it's fixed. */
+  function onBlurField(e: React.FocusEvent<HTMLInputElement>) {
+    const { name, value } = e.currentTarget;
+    const err = fieldError(name, value);
+    setErrors((prev) => {
+      const next = { ...prev };
+      if (err) next[name] = err;
+      else delete next[name];
+      return next;
+    });
+  }
+
+  function onFormChange(e: FormEvent<HTMLFormElement>) {
+    const fd = new FormData(e.currentTarget);
+    setAddressDone(ADDRESS_FIELDS.every((k) => !fieldError(k, String(fd.get(k) ?? ""))));
+    const target = e.target as HTMLInputElement;
+    if (errors[target.name] && !fieldError(target.name, target.value)) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[target.name];
+        return next;
+      });
+    }
+  }
+
+  function placeOrder(express: boolean) {
+    setSubmitting(true);
+    const orderNo = saveOrder(
+      shipping === "express",
+      total,
+      lines.map((l) => ({ name: l.product.name, color: l.color.name[locale], size: l.size, qty: l.qty })),
+    );
+    window.setTimeout(() => {
+      clear();
+      router.push(`/checkout/success?order=${orderNo}${express ? "&express=1" : ""}`);
+    }, express ? 900 : 600);
+  }
+
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const next: Record<string, string> = {};
-    for (const key of ["email", "firstName", "lastName", "address", "city", "zip", "country", "cardNumber", "expiry", "cvc", "nameOnCard"]) {
-      if (!String(fd.get(key) ?? "").trim()) next[key] = t.checkout.required;
+    for (const key of [...ADDRESS_FIELDS, ...PAYMENT_FIELDS]) {
+      const err = fieldError(key, String(fd.get(key) ?? ""));
+      if (err) next[key] = err;
     }
-    const email = String(fd.get("email") ?? "");
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = t.checkout.invalidEmail;
     setErrors(next);
     if (Object.keys(next).length) {
       const first = Object.keys(next)[0];
       (e.currentTarget.elements.namedItem(first) as HTMLElement | null)?.focus();
       return;
     }
-    setSubmitting(true);
-    const orderNo = `MRD-${Date.now().toString(36).toUpperCase().slice(-6)}`;
-    window.setTimeout(() => {
-      clear();
-      router.push(`/checkout/success?order=${orderNo}`);
-    }, 700);
+    // Remember contact + address (never card data) when the visitor opted in.
+    if (remember) {
+      const keep: Record<string, string> = {};
+      for (const k of [...ADDRESS_FIELDS, "phone"]) keep[k] = String(fd.get(k) ?? "");
+      detailsStore.set(keep);
+    } else {
+      detailsStore.set(null);
+    }
+    placeOrder(false);
   }
+
+  const formatCard = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digits = e.currentTarget.value.replace(/\D/g, "").slice(0, 16);
+    e.currentTarget.value = digits.replace(/(.{4})/g, "$1 ").trim();
+  };
+  const formatExpiry = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const d = e.currentTarget.value.replace(/\D/g, "").slice(0, 4);
+    e.currentTarget.value = d.length > 2 ? `${d.slice(0, 2)} / ${d.slice(2)}` : d;
+  };
+  const formatCvc = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "").slice(0, 4);
+  };
+
+  const step = submitting ? 3 : addressDone ? 2 : 1;
+  const window_ = now !== null ? deliveryWindow(new Date(now), shipping === "express") : null;
 
   if (hydrated && lines.length === 0) {
     return (
@@ -90,12 +169,14 @@ export function CheckoutClient() {
         id={`co-${name}`}
         name={name}
         aria-invalid={Boolean(errors[name])}
+        onBlur={onBlurField}
+        defaultValue={saved?.[name] ?? props.defaultValue}
         aria-describedby={errors[name] ? `co-${name}-err` : undefined}
         className={cn(
           "h-12 border bg-cream px-3 text-sm text-navy focus:outline-none focus:border-navy transition-colors",
           errors[name] ? "border-[#7a3b41]" : "border-line",
         )}
-        {...props}
+        {...Object.fromEntries(Object.entries(props).filter(([k]) => k !== "defaultValue"))}
       />
       {errors[name] && (
         <p id={`co-${name}-err`} className="text-xs text-[#7a3b41]">
@@ -112,8 +193,62 @@ export function CheckoutClient() {
         <p className="label text-olive">{t.checkout.demo}</p>
       </div>
 
-      <form onSubmit={onSubmit} noValidate className="grid gap-12 lg:grid-cols-[1fr_400px]">
+      {/* Progress */}
+      <ol className="mb-10 grid grid-cols-4 gap-2" aria-label="Checkout">
+        {t.flow.steps.map((label, i) => {
+          const done = i < step;
+          const current = i === step;
+          return (
+            <li key={label} aria-current={current ? "step" : undefined} className="flex flex-col gap-2">
+              <span className={cn("h-0.5 w-full transition-colors duration-500", done || current ? "bg-navy" : "bg-line")} />
+              <span className={cn("label text-[0.6rem]", done ? "text-olive" : current ? "text-navy" : "text-taupe")}>
+                {done ? "✓ " : `${i + 1}. `}
+                {label}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+
+      <form
+        key={saved ? "saved" : "fresh"}
+        onSubmit={onSubmit}
+        onChange={onFormChange}
+        noValidate
+        className="grid gap-12 lg:grid-cols-[1fr_400px]"
+      >
         <div className="flex flex-col gap-10">
+          {/* Express checkout */}
+          <section aria-labelledby="co-express">
+            <h2 id="co-express" className="label mb-3 text-navy">
+              {t.flow.express}
+            </h2>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { label: "Apple Pay", cls: "bg-black text-white" },
+                { label: "Google Pay", cls: "bg-white text-black border border-line" },
+                { label: "PayPal", cls: "bg-[#ffc439] text-[#003087]" },
+              ].map((b) => (
+                <button
+                  key={b.label}
+                  type="button"
+                  disabled={submitting || !hydrated}
+                  onClick={() => placeOrder(true)}
+                  className={cn("h-12 text-sm font-semibold tracking-wide transition-opacity hover:opacity-90 disabled:opacity-50", b.cls)}
+                >
+                  {b.label}
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-[0.68rem] text-taupe">{t.flow.demoExpress}</p>
+            <div className="mt-6 flex items-center gap-4 text-[0.66rem] uppercase tracking-[0.18em] text-taupe">
+              <span className="h-px flex-1 bg-line" />
+              {t.flow.or}
+              <span className="h-px flex-1 bg-line" />
+            </div>
+            {saved && <p className="mt-4 text-xs text-olive">{t.flow.welcomeBack}</p>}
+          </section>
+
           <section aria-labelledby="co-contact">
             <h2 id="co-contact" className="font-serif text-2xl text-navy mb-4">
               {t.checkout.contact}
@@ -134,6 +269,10 @@ export function CheckoutClient() {
               {field("country", t.checkout.country, { autoComplete: "country-name", defaultValue: locale === "it" ? "Italia" : "Italy" })}
               {field("phone", t.checkout.phone, { type: "tel", autoComplete: "tel", inputMode: "tel" })}
             </div>
+            <label className="mt-4 flex cursor-pointer items-center gap-2.5 text-xs text-charcoal/80">
+              <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="accent-navy" />
+              {t.flow.remember}
+            </label>
           </section>
 
           <section aria-labelledby="co-method">
@@ -172,10 +311,10 @@ export function CheckoutClient() {
             <p className="text-xs text-taupe mb-4">{t.checkout.demo}</p>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                {field("cardNumber", t.checkout.cardNumber, { inputMode: "numeric", autoComplete: "cc-number", placeholder: "4242 4242 4242 4242" })}
+                {field("cardNumber", t.checkout.cardNumber, { inputMode: "numeric", autoComplete: "cc-number", placeholder: "4242 4242 4242 4242", onChange: formatCard })}
               </div>
-              {field("expiry", t.checkout.expiry, { autoComplete: "cc-exp", placeholder: "MM / YY" })}
-              {field("cvc", t.checkout.cvc, { inputMode: "numeric", autoComplete: "cc-csc", placeholder: "123" })}
+              {field("expiry", t.checkout.expiry, { autoComplete: "cc-exp", inputMode: "numeric", placeholder: "MM / YY", onChange: formatExpiry })}
+              {field("cvc", t.checkout.cvc, { inputMode: "numeric", autoComplete: "cc-csc", placeholder: "123", onChange: formatCvc })}
               <div className="sm:col-span-2">{field("nameOnCard", t.checkout.nameOnCard, { autoComplete: "cc-name" })}</div>
             </div>
           </section>
@@ -257,6 +396,12 @@ export function CheckoutClient() {
               <dd className="tabular-nums">{formatPrice(total, locale)}</dd>
             </div>
             <p className="text-xs text-taupe">{t.checkout.vat}</p>
+            {window_ && (
+              <p className="text-xs text-charcoal/80">
+                {t.delivery.arrives} <strong className="font-medium text-navy">{formatDay(window_[0], locale)}</strong> {t.delivery.and}{" "}
+                <strong className="font-medium text-navy">{formatDay(window_[1], locale)}</strong>
+              </p>
+            )}
             {discount > 0 && (
               <p className="text-xs font-medium text-olive">
                 {t.tiers.saved} {formatPrice(discount, locale)}

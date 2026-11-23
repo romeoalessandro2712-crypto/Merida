@@ -70,3 +70,45 @@ export function recordView(productId: string) {
 export function useRecent() {
   return useSyncExternalStore(recentStore.subscribe, recentStore.get, recentStore.getServer);
 }
+
+/* ------------------------------ Preferred size ------------------------------ */
+
+/** The last apparel size the visitor added to the cart; pre-selected on the next product. */
+export const prefSizeStore = createPersistedStore<string | null>(
+  "meridia:pref-size",
+  null,
+  (v): v is string | null => v === null || typeof v === "string",
+);
+
+export function usePrefSize() {
+  return useSyncExternalStore(prefSizeStore.subscribe, prefSizeStore.get, prefSizeStore.getServer);
+}
+
+/* --------------------------------- Orders ---------------------------------- */
+
+export interface SavedOrder {
+  id: string;
+  placedAt: number;
+  express: boolean;
+  total: number;
+  items: { name: string; color: string; size: string; qty: number }[];
+}
+
+export const ordersStore = createPersistedStore<SavedOrder[]>("meridia:orders", [], Array.isArray);
+
+export function useOrders() {
+  return useSyncExternalStore(ordersStore.subscribe, ordersStore.get, ordersStore.getServer);
+}
+
+/* ------------------------------ Saved details ------------------------------- */
+
+export type SavedDetails = Record<string, string>;
+export const detailsStore = createPersistedStore<SavedDetails | null>(
+  "meridia:details",
+  null,
+  (v): v is SavedDetails | null => v === null || typeof v === "object",
+);
+
+export function useSavedDetails() {
+  return useSyncExternalStore(detailsStore.subscribe, detailsStore.get, detailsStore.getServer);
+}

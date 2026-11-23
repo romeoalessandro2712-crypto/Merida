@@ -17,7 +17,12 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { cn, formatPrice } from "@/lib/format";
 import { flyToCart } from "@/lib/fly-to-cart";
-import { recordView } from "@/lib/engagement";
+import { prefSizeStore, recordView, usePrefSize } from "@/lib/engagement";
+import { SizeGuide } from "@/components/pdp/SizeGuide";
+import { DeliveryEstimate } from "@/components/pdp/DeliveryEstimate";
+import { TrustRow } from "@/components/pdp/TrustRow";
+import { NotifyMe } from "@/components/pdp/NotifyMe";
+import { ProductStory } from "@/components/pdp/ProductStory";
 import { FrequentlyBought } from "@/components/product/FrequentlyBought";
 import { RecentlyViewed } from "@/components/product/RecentlyViewed";
 
@@ -26,7 +31,13 @@ export function ProductPageClient({ product, related }: { product: Product; rela
   const { add } = useCart();
   const { notify, open } = useUI();
   const [colorId, setColorId] = useState(product.colors[0].id);
-  const [size, setSize] = useState<Size | undefined>(product.sizes.length === 1 ? product.sizes[0] : undefined);
+  const [chosenSize, setSize] = useState<Size | undefined>(product.sizes.length === 1 ? product.sizes[0] : undefined);
+  const [guideOpen, setGuideOpen] = useState(false);
+  // Pre-select the size the visitor picked last time, when it's in stock here.
+  const pref = usePrefSize() as Size | null;
+  const prefUsable = pref && product.sizes.length > 1 && product.sizes.includes(pref) && !product.soldOut?.includes(pref);
+  const size = chosenSize ?? (prefUsable ? pref : undefined);
+  const fromPref = chosenSize === undefined && Boolean(prefUsable);
   const [sizeError, setSizeError] = useState(false);
   const color = product.colors.find((c) => c.id === colorId) ?? product.colors[0];
   const category = CATEGORIES.find((c) => c.slug === product.category);
@@ -54,9 +65,10 @@ export function ProductPageClient({ product, related }: { product: Product; rela
       return;
     }
     add(product.id, color.id, size);
+    if (size !== "ONE") prefSizeStore.set(size);
     notify(t.product.addedToCart);
     flyToCart(source, color.hex);
-    window.setTimeout(() => open("cart"), 750);
+    window.setTimeout(() => open("cart"), 450);
   }
 
   const lowSelected = size !== undefined && product.lowStock?.includes(size);
@@ -117,9 +129,21 @@ export function ProductPageClient({ product, related }: { product: Product; rela
                     <p className={cn("label", sizeError ? "text-burgundy" : "text-navy")} id="size-label">
                       {t.product.size}
                       {sizeError && <span className="ml-2 normal-case tracking-normal text-[#7a3b41]">— {t.product.selectSizeFirst}</span>}
+                      {fromPref && !sizeError && (
+                        <span className="ml-2 normal-case tracking-normal text-olive">— {t.sizeGuide.remembered}: {size}</span>
+                      )}
                     </p>
-                    <button type="button" className="label text-taupe underline-offset-4 hover:underline">
-                      {t.product.sizeGuide}
+                    <button
+                      type="button"
+                      onClick={() => setGuideOpen(true)}
+                      aria-haspopup="dialog"
+                      aria-controls="drawer-size-guide"
+                      className="label inline-flex items-center gap-1.5 text-navy underline-offset-4 hover:underline"
+                    >
+                      <svg viewBox="0 0 24 24" width={16} height={16} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth={1.3}>
+                        <path d="M3 8h18v8H3zM7 8v3M11 8v4M15 8v3M19 8v4" />
+                      </svg>
+                      {t.sizeGuide.finder}
                     </button>
                   </div>
                   <SizeSelector
@@ -143,8 +167,11 @@ export function ProductPageClient({ product, related }: { product: Product; rela
                       {t.stock.lowShort}
                     </p>
                   ) : null}
+                  {product.model && <p className="mt-3 text-xs text-taupe">{product.model[locale]}</p>}
+                  {product.soldOut?.[0] && <NotifyMe size={product.soldOut[0]} />}
                 </div>
               )}
+              {product.sizeNote && <p className="-mt-2 text-xs text-taupe">{product.sizeNote[locale]}</p>}
 
               <div ref={atcRef} className="flex items-stretch gap-3">
                 <Button size="lg" className="flex-1" onClick={(e) => addToCart(e.currentTarget)}>
@@ -152,12 +179,15 @@ export function ProductPageClient({ product, related }: { product: Product; rela
                 </Button>
                 <WishlistButton productId={product.id} className="h-14 w-14 shrink-0 justify-center border border-line hover:border-navy" />
               </div>
-              <p className="text-xs text-olive">{t.product.stock}</p>
+              <DeliveryEstimate />
+              <TrustRow />
             </div>
 
             <FrequentlyBought product={product} colorId={color.id} size={size} />
 
             <p className="mt-8 text-[0.95rem] leading-relaxed text-charcoal/85">{product.description[locale]}</p>
+
+            <ProductStory product={product} />
 
             <div className="mt-8">
               <Accordion
@@ -194,6 +224,16 @@ export function ProductPageClient({ product, related }: { product: Product; rela
           </div>
         </div>
       </div>
+
+      <SizeGuide
+        product={product}
+        open={guideOpen}
+        onClose={() => setGuideOpen(false)}
+        onSelect={(s) => {
+          setSize(s);
+          setSizeError(false);
+        }}
+      />
 
       {/* Sticky add-to-cart bar (mobile) */}
       <div

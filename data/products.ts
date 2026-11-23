@@ -62,6 +62,18 @@ export interface Product {
   fabricCare: Localized[];
   /** Style tags used for "You may also like" */
   tags: string[];
+  /** Where the fit sits on a slim (0) → relaxed (2) scale */
+  fit: 0 | 1 | 2;
+  /** Garment measurements in cm, per size (taken flat; chest is doubled) */
+  measurements?: Partial<Record<Size, { chest: number; length: number; sleeve: number }>>;
+  /** Free-text size note for one-size accessories */
+  sizeNote?: Localized;
+  /** Model information, shown under the size selector */
+  model?: Localized;
+  /** The story behind the name */
+  story: Localized;
+  /** Traceability: where each step happens */
+  origin: { fibre: Localized; made: Localized; composition: Localized };
 }
 
 export interface Category {
@@ -159,6 +171,18 @@ export const PRODUCTS: Product[] = [
       { it: "Asciugare in piano", en: "Dry flat" },
     ],
     tags: ["cotton", "summer", "polo", "weekend"],
+    fit: 1,
+    measurements: { XS: { chest: 98, length: 66, sleeve: 20 }, S: { chest: 103, length: 68, sleeve: 21 }, M: { chest: 108, length: 70, sleeve: 22 }, L: { chest: 113, length: 72, sleeve: 23 }, XL: { chest: 118, length: 74, sleeve: 24 } },
+    model: { it: "Il modello è alto 185 cm e indossa la M.", en: "The model is 185 cm tall and wears M." },
+    story: {
+      it: "Portofino è il porto dove le reti asciugano al sole e le righe delle magliette dei pescatori si vedono da lontano. Abbiamo tenuto la riga, tolto il rumore.",
+      en: "Portofino is the harbour where nets dry in the sun and fishermen's stripes can be seen from the hill. We kept the stripe and left out the noise.",
+    },
+    origin: {
+      fibre: { it: "Cotone a fibra lunga, Egitto", en: "Long-staple cotton, Egypt" },
+      made: { it: "Tinto in filo e confezionato a Barcelos, Portogallo", en: "Yarn-dyed and sewn in Barcelos, Portugal" },
+      composition: { it: "100% cotone — nessuna fibra sintetica", en: "100% cotton — no synthetic fibres" },
+    },
   },
   {
     id: "p-102",
@@ -188,6 +212,18 @@ export const PRODUCTS: Product[] = [
       { it: "Stirare leggermente umida", en: "Iron while slightly damp" },
     ],
     tags: ["linen", "summer", "shirt", "office"],
+    fit: 1,
+    measurements: { XS: { chest: 104, length: 72, sleeve: 61 }, S: { chest: 109, length: 74, sleeve: 62 }, M: { chest: 114, length: 76, sleeve: 63 }, L: { chest: 119, length: 78, sleeve: 64 }, XL: { chest: 124, length: 80, sleeve: 65 } },
+    model: { it: "Il modello è alto 185 cm e indossa la M.", en: "The model is 185 cm tall and wears M." },
+    story: {
+      it: "Sulla costiera di Amalfi le camicie di lino si stendono in terrazza e si indossano ancora calde di sole. Una riga sottile, come le persiane al mattino.",
+      en: "On the Amalfi coast linen shirts dry on terraces and are worn still warm from the sun. A fine stripe, like shutters in the morning.",
+    },
+    origin: {
+      fibre: { it: "Lino coltivato in Normandia, Francia", en: "Flax grown in Normandy, France" },
+      made: { it: "Tessuto a Biella e confezionato in Puglia, Italia", en: "Woven in Biella and sewn in Apulia, Italy" },
+      composition: { it: "100% lino — nessuna fibra sintetica", en: "100% linen — no synthetic fibres" },
+    },
   },
   {
     id: "p-103",
@@ -217,6 +253,18 @@ export const PRODUCTS: Product[] = [
       { it: "Asciugare in piano, all'ombra", en: "Dry flat, in the shade" },
     ],
     tags: ["linen", "summer", "layering", "evening"],
+    fit: 2,
+    measurements: { XS: { chest: 106, length: 64, sleeve: 60 }, S: { chest: 111, length: 66, sleeve: 61 }, M: { chest: 116, length: 68, sleeve: 62 }, L: { chest: 121, length: 70, sleeve: 63 }, XL: { chest: 126, length: 72, sleeve: 64 } },
+    model: { it: "Il modello è alto 185 cm e indossa la M per una vestibilità morbida.", en: "The model is 185 cm tall and wears M for a relaxed fit." },
+    story: {
+      it: "A Sorrento, quando il sole scende dietro il Vesuvio, arriva la brezza della sera. Questa maglia è per quel momento: leggera, aperta, da tenere sulle spalle.",
+      en: "In Sorrento, when the sun sets behind Vesuvius, the evening breeze arrives. This knit is for that moment: light, open, worn over the shoulders.",
+    },
+    origin: {
+      fibre: { it: "Lino europeo e cotone biologico", en: "European flax and organic cotton" },
+      made: { it: "Lavorato a maglia a Carpi, Italia", en: "Knitted in Carpi, Italy" },
+      composition: { it: "60% lino, 40% cotone — nessuna fibra sintetica", en: "60% linen, 40% cotton — no synthetic fibres" },
+    },
   },
   {
     id: "p-104",
@@ -239,6 +287,17 @@ export const PRODUCTS: Product[] = [
     ],
     fabricCare: [{ it: "Lavare a mano in acqua fredda", en: "Hand wash cold" }],
     tags: ["cotton", "summer", "weekend", "gift"],
+    fit: 1,
+    sizeNote: { it: "Taglia unica regolabile: da 55 a 60 cm di circonferenza.", en: "Adjustable one size: fits 55 to 60 cm head circumference." },
+    story: {
+      it: "La Riviera è sole basso e passeggiate lunghe. Un cappello di cotone lavato, senza logo, che invecchia bene e si piega in tasca.",
+      en: "The Riviera means low sun and long walks. A washed cotton cap with no logo that ages well and folds into a pocket.",
+    },
+    origin: {
+      fibre: { it: "Cotone twill, Italia", en: "Cotton twill, Italy" },
+      made: { it: "Cucito a mano a Prato, Italia", en: "Hand-sewn in Prato, Italy" },
+      composition: { it: "100% cotone, fibbia in ottone", en: "100% cotton, brass buckle" },
+    },
   },
   {
     id: "p-105",
@@ -268,6 +327,17 @@ export const PRODUCTS: Product[] = [
     ],
     fabricCare: [{ it: "Evitare il contatto prolungato con l'acqua", en: "Avoid prolonged contact with water" }],
     tags: ["gift", "summer", "evening", "weekend"],
+    fit: 1,
+    sizeNote: { it: "Circonferenza 19 cm: veste polsi da 16 a 18 cm.", en: "19 cm circumference: fits wrists from 16 to 18 cm." },
+    story: {
+      it: "A Capri i pescatori intrecciano le cime a mano. Abbiamo chiesto lo stesso gesto per un bracciale: quattro capi di cordino e una chiusura con la nostra M.",
+      en: "In Capri fishermen braid their ropes by hand. We asked for the same gesture for a bracelet: four strands of cord and a clasp with our M.",
+    },
+    origin: {
+      fibre: { it: "Cordino di cotone cerato, Italia", en: "Waxed cotton cord, Italy" },
+      made: { it: "Intrecciato a mano a Napoli, Italia", en: "Hand-braided in Naples, Italy" },
+      composition: { it: "Cotone cerato, ottone brunito", en: "Waxed cotton, burnished brass" },
+    },
   },
 ];
 

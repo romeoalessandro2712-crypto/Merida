@@ -26,6 +26,7 @@ export function Footer() {
     {
       title: t.footer.care,
       links: [
+        { href: "/track", label: t.track.nav },
         { href: "/info/contact", label: t.footer.contact },
         { href: "/info/faq", label: t.footer.faq },
         { href: "/info/shipping", label: t.footer.shipping },

@@ -5,6 +5,7 @@ import { useT } from "@/lib/providers";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { Guilloche } from "@/components/brand/Guilloche";
+import { CheckIcon } from "@/components/ui/Icons";
 
 export function Newsletter() {
   const { t } = useT();
@@ -24,10 +25,18 @@ export function Newsletter() {
       </div>
       <Reveal className="mx-auto max-w-7xl px-4 md:px-8 py-16 md:py-24 grid gap-8 md:grid-cols-2 md:items-center">
         <div>
-          <h2 id="newsletter-title" className="font-serif text-3xl md:text-[2.6rem] leading-[1.1] font-medium">
+          <span className="label text-gold-light">{t.club.label}</span>
+          <h2 id="newsletter-title" className="mt-2 font-serif text-3xl md:text-[2.6rem] leading-[1.1] font-medium">
             {t.newsletter.title}
           </h2>
           <p className="mt-3 max-w-md text-sm text-cream/75 leading-relaxed">{t.newsletter.subtitle}</p>
+          <ul className="mt-5 flex flex-col gap-2">
+            {t.club.perks.map((perk) => (
+              <li key={perk} className="flex items-center gap-2.5 text-sm text-cream/85">
+                <CheckIcon className="text-gold" /> {perk}
+              </li>
+            ))}
+          </ul>
         </div>
         <form onSubmit={submit} noValidate className="md:justify-self-end w-full max-w-md">
           {state === "done" ? (

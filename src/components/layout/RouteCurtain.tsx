@@ -49,7 +49,7 @@ export function RouteCurtain() {
       let path = url.pathname;
       if (BASE && path.startsWith(BASE)) path = path.slice(BASE.length) || "/";
       set("cover");
-      later(() => router.push(path + url.search + url.hash, { scroll: true }), 560);
+      later(() => router.push(path + url.search + url.hash, { scroll: true }), 380);
       // Safety net: never leave the curtain down.
       later(() => {
         if (phaseRef.current === "cover") set("reveal");
@@ -71,7 +71,7 @@ export function RouteCurtain() {
     window.scrollTo(0, 0);
     const raf = requestAnimationFrame(() => {
       set("reveal");
-      timers.current.push(window.setTimeout(() => set("idle"), 850));
+      timers.current.push(window.setTimeout(() => set("idle"), 600));
     });
     return () => cancelAnimationFrame(raf);
   }, [pathname]);

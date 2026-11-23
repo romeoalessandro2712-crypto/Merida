@@ -13,6 +13,7 @@ import { CartRewards } from "./CartRewards";
 import { computeTotals, pct } from "@/lib/pricing";
 import { useReward } from "@/lib/engagement";
 import { formatPrice } from "@/lib/format";
+import { DeliveryEstimate } from "@/components/pdp/DeliveryEstimate";
 
 export function CartDrawer() {
   const { t, locale } = useT();
@@ -67,6 +68,7 @@ export function CartDrawer() {
                 <dd className="font-serif text-2xl tabular-nums text-navy">{formatPrice(totals.subtotal - totals.discount, locale)}</dd>
               </div>
             </dl>
+            <DeliveryEstimate compact className="mb-1" />
             <p className="text-xs text-taupe">{t.cart.shippingNote}</p>
             {totals.discount > 0 && (
               <p className="mt-1 text-xs font-medium text-olive">

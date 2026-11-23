@@ -44,7 +44,7 @@ export function FrequentlyBought({ product, colorId, size }: { product: Product;
     }
     flyToCart(source, product.colors.find((c) => c.id === colorId)?.hex ?? product.colors[0].hex);
     notify(t.product.addedToCart);
-    window.setTimeout(() => open("cart"), 750);
+    window.setTimeout(() => open("cart"), 450);
   }
 
   if (partners.length === 0) return null;

@@ -25,9 +25,12 @@ export function SuccessClient() {
       <p className="mt-6 label text-taupe">
         {t.checkout.orderNumber}: <span className="text-navy">{order}</span>
       </p>
-      <ButtonLink href="/shop" className="mt-10">
-        {t.checkout.continue}
-      </ButtonLink>
+      <div className="mt-10 flex flex-wrap justify-center gap-3">
+        <ButtonLink href={`/track?order=${order}`}>{t.track.cta}</ButtonLink>
+        <ButtonLink href="/shop" variant="secondary">
+          {t.checkout.continue}
+        </ButtonLink>
+      </div>
     </div>
   );
 }
