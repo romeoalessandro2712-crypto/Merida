@@ -12,6 +12,7 @@ import { Newsletter } from "@/components/home/Newsletter";
 import { QuizPromo } from "@/components/home/QuizPromo";
 import { Manifesto } from "@/components/home/Manifesto";
 import { HomeFaq } from "@/components/home/HomeFaq";
+import { EditorialSplit } from "@/components/home/EditorialSplit";
 import { RecentlyViewed } from "@/components/product/RecentlyViewed";
 
 export default function HomePage() {
@@ -21,6 +22,7 @@ export default function HomePage() {
       <Hero />
       <TrustMarquee />
       <FeaturedCarousel />
+      <EditorialSplit />
       <ShopByCategory />
       <ScrollZoom />
       <CategoryTiles />

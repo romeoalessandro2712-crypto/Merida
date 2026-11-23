@@ -8,6 +8,7 @@
  */
 
 import type { ArtKind } from "../src/components/product/garments";
+import photoManifest from "./photo-manifest.json";
 
 export type CategorySlug =
   | "knitwear"
@@ -143,7 +144,7 @@ const ONE: Size[] = ["ONE"];
 
 /* ---------- Products: the MERIDIA capsule ---------- */
 
-export const PRODUCTS: Product[] = [
+const RAW_PRODUCTS: Product[] = [
   {
     id: "p-101",
     slug: "portofino-striped-polo",
@@ -340,6 +341,21 @@ export const PRODUCTS: Product[] = [
     },
   },
 ];
+
+/**
+ * Real photos are picked up automatically from public/products/<slug>/<colour>-<n>.jpg
+ * (see scripts/scan-photos.mjs and docs/photo-guide.md). -1 is the packshot, -2 the worn photo.
+ * Colours without photos keep the illustrations.
+ */
+const PHOTOS = (photoManifest as { products: Record<string, Record<string, string[]>> }).products;
+
+export const PRODUCTS: Product[] = RAW_PRODUCTS.map((p) => ({
+  ...p,
+  colors: p.colors.map((c) => (PHOTOS[p.slug]?.[c.id]?.length ? { ...c, images: PHOTOS[p.slug][c.id] } : c)),
+}));
+
+/** Campaign photos for the homepage editorial section (public/editorial). */
+export const EDITORIAL_PHOTOS: string[] = (photoManifest as { editorial: string[] }).editorial;
 
 /* ---------- Looks ("Our community" / shop the look) ---------- */
 

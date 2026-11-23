@@ -197,6 +197,7 @@ const dict = {
       emptyTitle: "Il carrello è vuoto",
       emptyText: "Aggiungi qualche capo prima di procedere al checkout.",
     },
+    editorial: { label: "Campagna Primavera/Estate 27", cta: "Acquista il look" },
     manifesto: {
       label: "Il manifesto",
       lines: ["Comprare meno.", "Scegliere meglio.", "Indossare a lungo."],
@@ -600,6 +601,7 @@ const dict = {
       emptyTitle: "Your cart is empty",
       emptyText: "Add a few pieces before proceeding to checkout.",
     },
+    editorial: { label: "Spring/Summer 27 campaign", cta: "Shop the look" },
     manifesto: {
       label: "The manifesto",
       lines: ["Buy less.", "Choose better.", "Wear it longer."],
