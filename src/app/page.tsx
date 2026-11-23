@@ -10,6 +10,8 @@ import { Reviews } from "@/components/home/Reviews";
 import { Community } from "@/components/home/Community";
 import { Newsletter } from "@/components/home/Newsletter";
 import { QuizPromo } from "@/components/home/QuizPromo";
+import { Manifesto } from "@/components/home/Manifesto";
+import { HomeFaq } from "@/components/home/HomeFaq";
 import { RecentlyViewed } from "@/components/product/RecentlyViewed";
 
 export default function HomePage() {
@@ -28,6 +30,8 @@ export default function HomePage() {
       <RecentlyViewed className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24" />
       <Reviews />
       <Community />
+      <Manifesto />
+      <HomeFaq />
       <Newsletter />
     </div>
   );

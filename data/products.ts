@@ -173,7 +173,7 @@ export const PRODUCTS: Product[] = [
     tags: ["cotton", "summer", "polo", "weekend"],
     fit: 1,
     measurements: { XS: { chest: 98, length: 66, sleeve: 20 }, S: { chest: 103, length: 68, sleeve: 21 }, M: { chest: 108, length: 70, sleeve: 22 }, L: { chest: 113, length: 72, sleeve: 23 }, XL: { chest: 118, length: 74, sleeve: 24 } },
-    model: { it: "Il modello è alto 185 cm e indossa la M.", en: "The model is 185 cm tall and wears M." },
+    model: { it: "Il modello è alto 185 cm, pesa 78 kg e indossa la M.", en: "The model is 185 cm tall, weighs 78 kg and wears M." },
     story: {
       it: "Portofino è il porto dove le reti asciugano al sole e le righe delle magliette dei pescatori si vedono da lontano. Abbiamo tenuto la riga, tolto il rumore.",
       en: "Portofino is the harbour where nets dry in the sun and fishermen's stripes can be seen from the hill. We kept the stripe and left out the noise.",
@@ -214,7 +214,7 @@ export const PRODUCTS: Product[] = [
     tags: ["linen", "summer", "shirt", "office"],
     fit: 1,
     measurements: { XS: { chest: 104, length: 72, sleeve: 61 }, S: { chest: 109, length: 74, sleeve: 62 }, M: { chest: 114, length: 76, sleeve: 63 }, L: { chest: 119, length: 78, sleeve: 64 }, XL: { chest: 124, length: 80, sleeve: 65 } },
-    model: { it: "Il modello è alto 185 cm e indossa la M.", en: "The model is 185 cm tall and wears M." },
+    model: { it: "Il modello è alto 185 cm, pesa 78 kg e indossa la M.", en: "The model is 185 cm tall, weighs 78 kg and wears M." },
     story: {
       it: "Sulla costiera di Amalfi le camicie di lino si stendono in terrazza e si indossano ancora calde di sole. Una riga sottile, come le persiane al mattino.",
       en: "On the Amalfi coast linen shirts dry on terraces and are worn still warm from the sun. A fine stripe, like shutters in the morning.",
@@ -255,7 +255,7 @@ export const PRODUCTS: Product[] = [
     tags: ["linen", "summer", "layering", "evening"],
     fit: 2,
     measurements: { XS: { chest: 106, length: 64, sleeve: 60 }, S: { chest: 111, length: 66, sleeve: 61 }, M: { chest: 116, length: 68, sleeve: 62 }, L: { chest: 121, length: 70, sleeve: 63 }, XL: { chest: 126, length: 72, sleeve: 64 } },
-    model: { it: "Il modello è alto 185 cm e indossa la M per una vestibilità morbida.", en: "The model is 185 cm tall and wears M for a relaxed fit." },
+    model: { it: "Il modello è alto 185 cm, pesa 78 kg e indossa la M per una vestibilità morbida.", en: "The model is 185 cm tall, weighs 78 kg and wears M for a relaxed fit." },
     story: {
       it: "A Sorrento, quando il sole scende dietro il Vesuvio, arriva la brezza della sera. Questa maglia è per quel momento: leggera, aperta, da tenere sulle spalle.",
       en: "In Sorrento, when the sun sets behind Vesuvius, the evening breeze arrives. This knit is for that moment: light, open, worn over the shoulders.",

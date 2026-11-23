@@ -48,6 +48,24 @@ Weaknesses / openings
 - Pre-orders mean **uncertain waits** for the customer.
 - The size guide is static: it doesn't **recommend** a size.
 
+## Concentré (concentreclo.com)
+
+What they do well
+- **Rating in the header** ("Rated 4.5/5 by our customers") and a reviews row with titled reviews
+  ("Top quality, no logo markup", "Designer quality").
+- **Clear value message**: designer-level quality "without overpaying for the logo".
+- **Founder voice**: co-founder quotes about the brand's purpose, mixed with customer quotes.
+- Product page: **"Find My Size"** (height, weight, preferred fit), model info with height, weight
+  and size ("Model is 180 cm tall, weighs 70 kg and wears size M"), "You're saving €50",
+  social proof ("Vincenzo, Niklas and 1797 others love Concentré").
+- **FAQ on the homepage** and product page; an online **withdrawal (return) form**.
+
+Weaknesses / openings
+- **Slow delivery**: "6–10 business days" (FAQ) and "6–8 business days" (product page); a review
+  mentions long shipping.
+- **Customers pay for returns** ("You bear the direct cost of returning the goods").
+- Heavy discounting (Black Friday up to −40%, most products shown with crossed-out prices).
+
 ## What MERIDIA implemented
 
 Borrowed from what works
@@ -67,6 +85,10 @@ Opportunities neither competitor covers
 - **Rewards instead of permanent markdowns**: prices stay honest; savings come from the multi-piece
   discount or the welcome gift, and never stack.
 - **No gated homepage**: the scratch card and offers never block browsing.
+- **Free returns with an instant label** (online return request), where Concentré charges for returns.
+- **Faster, dated delivery**: 2–4 working days with real dates, versus 6–10 days.
+- **Pieces shown worn**: illustrated figures on product cards, in the gallery and in a shoppable
+  lookbook with hotspots, plus a weight-aware size finder and an animated brand manifesto.
 - **Smoother checkout**: step indicator, express payment, live validation, card formatting,
   "remember my details", delivery dates in the summary, faster page transitions.
 

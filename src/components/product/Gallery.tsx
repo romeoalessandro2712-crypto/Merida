@@ -1,16 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import type { ProductColor } from "@data/products";
+import type { Product, ProductColor } from "@data/products";
+import { detailShot, productOutfit } from "@/lib/outfit";
+import type { Shot } from "./Figure";
 import type { ArtKind } from "./garments";
 import { ProductImage } from "./ProductImage";
 import { cn } from "@/lib/format";
 import { useT } from "@/lib/providers";
 
 /** Gallery: real images when `color.images` is set, otherwise 4 tonal variants. */
-export function Gallery({ color, name, art }: { color: ProductColor; name: string; art?: ArtKind }) {
+export function Gallery({ color, name, art, product }: { color: ProductColor; name: string; art?: ArtKind; product?: Product }) {
   const { t, locale } = useT();
   const slides = color.images?.length ? color.images : [undefined, undefined, undefined, undefined];
+  // Without real photos: flat lay, full look worn, worn close-up, flat detail.
+  const shots: (Shot | null)[] = color.images?.length || !product ? [null, null, null, null] : [null, "full", detailShot(product), null];
+  const outfit = product ? productOutfit(product, color) : null;
+  const modelFor = (i: number) => (shots[i] && outfit ? { outfit, shot: shots[i]! } : undefined);
+  const variantFor = (i: number) => (i === 3 ? 1 : i);
   const [active, setActive] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
@@ -29,7 +36,7 @@ export function Gallery({ color, name, art }: { color: ProductColor; name: strin
               aria-current={active === i}
               className={cn("block w-full border transition-colors", active === i ? "border-navy" : "border-transparent hover:border-line")}
             >
-              <ProductImage src={src} alt="" art={art} stripe={color.stripe} tone={color.hex} variant={i} sizes="72px" monogram={false} />
+              <ProductImage src={src} alt="" art={art} stripe={color.stripe} tone={color.hex} variant={variantFor(i)} model={modelFor(i)} sizes="72px" monogram={false} />
             </button>
           </li>
         ))}
@@ -56,7 +63,8 @@ export function Gallery({ color, name, art }: { color: ProductColor; name: strin
             src={slides[active]}
             alt={alt(active)}
             art={art} stripe={color.stripe} tone={color.hex}
-            variant={active}
+            model={modelFor(active)}
+            variant={variantFor(active)}
             sizes="(min-width: 1024px) 50vw, 100vw"
             priority
           />
@@ -75,7 +83,7 @@ export function Gallery({ color, name, art }: { color: ProductColor; name: strin
         >
           {slides.map((src, i) => (
             <li key={i} className="w-full shrink-0 snap-center">
-              <ProductImage src={src} alt={alt(i)} art={art} stripe={color.stripe} tone={color.hex} variant={i} sizes="100vw" priority={i === 0} />
+              <ProductImage src={src} alt={alt(i)} art={art} stripe={color.stripe} tone={color.hex} variant={variantFor(i)} model={modelFor(i)} sizes="100vw" priority={i === 0} />
             </li>
           ))}
         </ul>

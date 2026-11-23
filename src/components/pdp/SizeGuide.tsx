@@ -23,10 +23,11 @@ export function SizeGuide({
   const { t, locale } = useT();
   const g = t.sizeGuide;
   const [height, setHeight] = useState(180);
+  const [weight, setWeight] = useState(75);
   const [usual, setUsual] = useState<Size | null>(null);
   const [pref, setPref] = useState<-1 | 0 | 1>(0);
   const [unit, setUnit] = useState<"cm" | "in">("cm");
-  const rec = recommendSize(product, height, usual, pref);
+  const rec = recommendSize(product, height, usual, pref, weight);
   const conv = (n: number) => (unit === "cm" ? n : Math.round((n / 2.54) * 10) / 10);
 
   return (
@@ -63,6 +64,17 @@ export function SizeGuide({
               max={205}
               value={height}
               onChange={(e) => setHeight(Number(e.target.value))}
+              className="mt-2 w-full"
+            />
+          </label>
+          <label className="mt-4 block text-xs text-charcoal/80">
+            {g.weight}: <strong className="text-navy tabular-nums">{weight} kg</strong>
+            <input
+              type="range"
+              min={45}
+              max={130}
+              value={weight}
+              onChange={(e) => setWeight(Number(e.target.value))}
               className="mt-2 w-full"
             />
           </label>

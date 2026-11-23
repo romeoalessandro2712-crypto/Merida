@@ -77,9 +77,14 @@ export function TrackClient() {
         </div>
       )}
       <p className="mt-8 text-xs text-taupe">{t.track.demo}</p>
-      <Link href="/shop" className="label mt-6 inline-block text-navy underline-offset-4 hover:underline">
-        {t.checkout.continue}
-      </Link>
+      <div className="mt-6 flex gap-6">
+        <Link href="/returns" className="label text-navy underline-offset-4 hover:underline">
+          {t.returnsFlow.nav}
+        </Link>
+        <Link href="/shop" className="label text-navy underline-offset-4 hover:underline">
+          {t.checkout.continue}
+        </Link>
+      </div>
     </div>
   );
 }

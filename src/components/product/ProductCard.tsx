@@ -13,6 +13,7 @@ import { WishlistButton } from "./WishlistButton";
 import { PlusIcon, CheckIcon } from "@/components/ui/Icons";
 import { Tilt } from "@/components/ui/Tilt";
 import { flyToCart } from "@/lib/fly-to-cart";
+import { detailShot, productOutfit } from "@/lib/outfit";
 
 export function ProductCard({
   product,
@@ -63,16 +64,16 @@ export function ProductCard({
             monogram={false}
             className="transition-transform duration-700 ease-out group-hover:scale-[1.03]"
           />
-          {/* Second view (detail) fades in on hover, like a second product photo */}
+          {/* Worn view fades in on hover, like an on-model photo */}
           <div aria-hidden="true" className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100">
             <ProductImage
               src={color.images?.[1]}
               alt=""
               tone={color.hex}
-              art={product.art}
-              stripe={color.stripe}
-              variant={1}
+              model={{ outfit: productOutfit(product, color), shot: detailShot(product) }}
+              variant={2}
               monogram={false}
+              className="transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
             />
           </div>
         </Link>

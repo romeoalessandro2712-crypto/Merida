@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useId } from "react";
 import { Garment, type ArtKind } from "./garments";
+import { Figure, SHOTS, type Outfit, type Shot } from "./Figure";
 import { cn } from "@/lib/format";
 import { asset } from "@/lib/asset";
 
@@ -32,6 +33,8 @@ export interface ProductImageProps {
   art?: ArtKind;
   /** Second colour for striped pieces */
   stripe?: string;
+  /** Show the piece worn by an illustrated figure instead of laid flat */
+  model?: { outfit: Outfit; shot: Shot };
 }
 
 /** Soft "photo studio" backdrops, one per gallery variant. */
@@ -84,12 +87,19 @@ export function ProductImage({
   monogram = true,
   art,
   stripe,
+  model,
 }: ProductImageProps) {
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   return (
     <div className={cn("relative w-full overflow-hidden bg-ecru", aspect, className)}>
       {src ? (
         <Image src={asset(src)} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
+      ) : model ? (
+        <div role="img" aria-label={alt} className="absolute inset-0" style={{ background: STUDIO[variant % STUDIO.length] }}>
+          <svg viewBox={SHOTS[model.shot]} preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full" aria-hidden="true">
+            <Figure outfit={model.outfit} id={uid} />
+          </svg>
+        </div>
       ) : art ? (
         <div role="img" aria-label={alt} className="absolute inset-0" style={{ background: STUDIO[variant % STUDIO.length] }}>
           <svg viewBox="0 0 200 250" preserveAspectRatio="xMidYMid meet" className="absolute inset-0 h-full w-full" aria-hidden="true">
