@@ -26,3 +26,11 @@ in this session, so no live analytics were available: findings come from the sit
   shoulders after 3 attempts; replace with a real shoot before any commercial use.
 - robots.txt and llms.txt only take effect at a domain root, i.e. once the site has its own domain.
 - Recheck SEO in ~30 days; there is no ranking guarantee.
+
+## ElevenLabs (24 Nov 2026)
+- **Voice stylist** (agent "MERIDIA Stylist", id agent_5001m86h3kjgf7gt7kkc6pkjngdx): answers only from the
+  "MERIDIA store facts" knowledge base; Italian voice "Luca", English via language detection.
+  Loaded on tap only (no third-party script or microphone prompt on page load); hidden on checkout.
+  Tests: sizing, no invented products, shipping/returns in English — 3/3 passed.
+- **Narrated brand story** (32 s, Italian) in the philosophy section, with transcript; never autoplays.
+- Privacy page updated to disclose that stylist conversations are processed by ElevenLabs.

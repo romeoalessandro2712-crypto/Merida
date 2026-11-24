@@ -15,6 +15,7 @@ import { ScratchAutoOpen, ScratchModal } from "@/components/engage/ScratchModal"
 import { GiftButton } from "@/components/engage/GiftButton";
 import { ExitIntentWatcher, ExitModal } from "@/components/engage/ExitIntent";
 import { TabNudge } from "@/components/engage/TabNudge";
+import { StylistWidget } from "@/components/engage/StylistWidget";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { RouteCurtain } from "@/components/layout/RouteCurtain";
 import { Intro } from "@/components/layout/Intro";
@@ -122,6 +123,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ExitIntentWatcher />
           <ExitModal />
           <TabNudge />
+          <StylistWidget />
           <SmoothScroll />
           <RouteCurtain />
         </Providers>

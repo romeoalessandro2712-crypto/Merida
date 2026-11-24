@@ -9,6 +9,7 @@ import { Aurora } from "@/components/brand/Aurora";
 import { Guilloche } from "@/components/brand/Guilloche";
 import { CrestMedallion } from "@/components/brand/CrestMedallion";
 import { Tilt } from "@/components/ui/Tilt";
+import { ListenStory } from "./ListenStory";
 
 export function BrandStory() {
   const { t } = useT();
@@ -27,6 +28,7 @@ export function BrandStory() {
           </h2>
           <p className="mt-6 text-[0.95rem] leading-relaxed text-cream/75">{t.story.p1}</p>
           <p className="mt-4 text-[0.95rem] leading-relaxed text-cream/75">{t.story.p2}</p>
+          <ListenStory />
           <Link
             href="/collections"
             className="label mt-9 inline-flex items-center gap-2 border-b border-gold pb-1 text-gold-light transition-colors hover:text-cream"
