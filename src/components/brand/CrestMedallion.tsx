@@ -5,6 +5,7 @@ import { cn } from "@/lib/format";
 
 const SIZES = {
   lg: "h-36 w-36 sm:h-44 sm:w-44 md:h-52 md:w-52",
+  hero: "h-24 w-24 sm:h-40 sm:w-40 md:h-52 md:w-52",
   md: "h-24 w-24 md:h-28 md:w-28",
   sm: "h-16 w-16",
 };

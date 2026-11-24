@@ -23,6 +23,7 @@ import { DeliveryEstimate } from "@/components/pdp/DeliveryEstimate";
 import { TrustRow } from "@/components/pdp/TrustRow";
 import { NotifyMe } from "@/components/pdp/NotifyMe";
 import { ProductStory } from "@/components/pdp/ProductStory";
+import { ShareButton } from "@/components/pdp/ShareButton";
 import { FrequentlyBought } from "@/components/product/FrequentlyBought";
 import { RecentlyViewed } from "@/components/product/RecentlyViewed";
 
@@ -175,9 +176,11 @@ export function ProductPageClient({ product, related }: { product: Product; rela
 
               <div ref={atcRef} className="flex items-stretch gap-3">
                 <Button size="lg" className="flex-1" onClick={(e) => addToCart(e.currentTarget)}>
-                  {t.product.addToCart}
+                  <span className="sm:hidden">{t.card.add}</span>
+                  <span className="hidden sm:inline">{t.product.addToCart}</span> · {formatPrice(product.price, locale)}
                 </Button>
                 <WishlistButton productId={product.id} className="h-14 w-14 shrink-0 justify-center border border-line hover:border-navy" />
+                <ShareButton title={product.name} />
               </div>
               <DeliveryEstimate />
               <TrustRow />

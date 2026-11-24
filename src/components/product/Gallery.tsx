@@ -12,12 +12,17 @@ import { useT } from "@/lib/providers";
 /** Gallery: real images when `color.images` is set, otherwise 4 tonal variants. */
 export function Gallery({ color, name, art, product }: { color: ProductColor; name: string; art?: ArtKind; product?: Product }) {
   const { t, locale } = useT();
-  const slides = color.images?.length ? color.images : [undefined, undefined, undefined, undefined];
-  // Without real photos: flat lay, full look worn, worn close-up, flat detail.
-  const shots: (Shot | null)[] = color.images?.length || !product ? [null, null, null, null] : [null, "full", detailShot(product), null];
+  // Real photos first, then the illustrations: flat lay, full look worn, worn close-up, flat detail.
+  const photos = color.images ?? [];
+  const illustrated: (Shot | null)[] = product ? [null, "full", detailShot(product), null] : [null, null, null, null];
+  const slides: (string | undefined)[] = [...photos, ...illustrated.map(() => undefined)].slice(0, Math.max(4, photos.length + 2));
+  const shots: (Shot | null)[] = [...photos.map(() => null), ...illustrated];
   const outfit = product ? productOutfit(product, color) : null;
   const modelFor = (i: number) => (shots[i] && outfit ? { outfit, shot: shots[i]! } : undefined);
-  const variantFor = (i: number) => (i === 3 ? 1 : i);
+  const variantFor = (i: number) => {
+    const k = i - photos.length;
+    return k === 3 ? 1 : Math.max(0, k);
+  };
   const [active, setActive] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
@@ -76,6 +81,7 @@ export function Gallery({ color, name, art, product }: { color: ProductColor; na
         <ul
           className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto"
           aria-label={t.product.gallery}
+          tabIndex={0}
           onScroll={(e) => {
             const el = e.currentTarget;
             setMobileIndex(Math.round(el.scrollLeft / Math.max(1, el.clientWidth)));

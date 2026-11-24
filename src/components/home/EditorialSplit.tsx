@@ -35,7 +35,8 @@ export function EditorialSplit() {
           product: p,
           color: (k === 0 ? p.colors.find((c) => c.hex === set.look.tone) : undefined) ?? p.colors[0],
         }));
-        const photo = EDITORIAL_PHOTOS[i];
+        // Panel 1 uses public/editorial/1-*.jpg, panel 2 uses 2-*.jpg.
+        const photo = EDITORIAL_PHOTOS.find((f) => f.split("/").pop()?.startsWith(`${i + 1}-`));
         return (
           <Link
             key={set.look.id}
@@ -49,7 +50,7 @@ export function EditorialSplit() {
                 alt={set.look.title[locale]}
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
-                className="kenburns object-cover"
+                className="kenburns object-cover object-[50%_6%]"
               />
             ) : (
               <>

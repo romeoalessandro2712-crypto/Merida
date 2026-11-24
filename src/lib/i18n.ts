@@ -49,7 +49,7 @@ const dict = {
     best: { title: "I best seller della settimana", subtitle: "I cinque pezzi della capsule, dal più amato." },
     story: {
       label: "La filosofia MERIDIA",
-      title: "Sensibilità europea. Design senza tempo. Sofisticazione quotidiana.",
+      title: "Il lusso silenzioso, ogni giorno.",
       p1: "MERIDIA nasce da un'idea semplice: vestirsi bene non dovrebbe richiedere sforzo, né rumore. Disegniamo capi essenziali con proporzioni misurate, tessuti naturali e un'attenzione ai dettagli che si nota solo da vicino.",
       p2: "Non seguiamo le stagioni della moda, ma quelle della vita: una riunione al mattino, un pranzo lungo, una passeggiata serale. Ogni pezzo è pensato per accompagnarti in tutte e tre, per molti anni.",
       cta: "La nostra storia",
@@ -138,8 +138,8 @@ const dict = {
     },
     cart: {
       title: "Carrello",
-      empty: "Il tuo carrello è vuoto.",
-      emptyCta: "Continua lo shopping",
+      empty: "Il carrello è vuoto. Inizia dai cinque pezzi della capsule.",
+      emptyCta: "Scopri la capsule",
       subtotal: "Subtotale",
       shippingNote: "Spese di spedizione e tasse calcolate al checkout.",
       checkout: "Procedi al checkout",
@@ -198,6 +198,9 @@ const dict = {
       emptyText: "Aggiungi qualche capo prima di procedere al checkout.",
     },
     editorial: { label: "Campagna Primavera/Estate 27", cta: "Acquista il look" },
+    stories: { label: "La capsule in 5 pezzi", names: { "portofino-striped-polo": "Polo", "amalfi-striped-linen-shirt": "Camicia", "sorrento-linen-sweater": "Maglia", "riviera-cotton-cap": "Cappello", "capri-braided-bracelet": "Bracciale" } },
+    share: { cta: "Condividi", copied: "Link copiato", text: "Guarda questo capo MERIDIA" },
+    heroQuiz: "Trova il tuo stile in 30 s",
     manifesto: {
       label: "Il manifesto",
       lines: ["Comprare meno.", "Scegliere meglio.", "Indossare a lungo."],
@@ -301,7 +304,7 @@ const dict = {
     announcements: [
       "Spedizione gratuita sopra i 149 € · Primavera/Estate 27 — disponibile ora",
       "2 capi -10% · 3 o più capi -15% su tutto il carrello",
-      "Gratta la card regalo: fino al -20% sul tuo ordine",
+      "Gratta la card regalo: fino al -20% sul primo ordine",
       "Reso gratuito entro 14 giorni",
     ],
     scratch: {
@@ -319,7 +322,7 @@ const dict = {
       later: "Più tardi",
       copy: "Copia",
       copied: "Copiato",
-      float: "Gratta e vinci",
+      float: "Gratta il tuo regalo",
       expires: "scade tra",
       close: "Chiudi",
     },
@@ -453,7 +456,7 @@ const dict = {
     best: { title: "Last week's best sellers", subtitle: "The five pieces of the capsule, most loved first." },
     story: {
       label: "The MERIDIA philosophy",
-      title: "European sensibility. Timeless design. Everyday sophistication.",
+      title: "Quiet luxury, every day.",
       p1: "MERIDIA starts from a simple idea: dressing well should take neither effort nor noise. We design essential pieces with measured proportions, natural fabrics and an attention to detail you only notice up close.",
       p2: "We don't follow the seasons of fashion, but those of life: a morning meeting, a long lunch, an evening walk. Every piece is made to accompany you through all three, for many years.",
       cta: "Our story",
@@ -542,8 +545,8 @@ const dict = {
     },
     cart: {
       title: "Cart",
-      empty: "Your cart is empty.",
-      emptyCta: "Continue shopping",
+      empty: "Your cart is empty. Start with the five pieces of the capsule.",
+      emptyCta: "Discover the capsule",
       subtotal: "Subtotal",
       shippingNote: "Shipping and taxes calculated at checkout.",
       checkout: "Proceed to checkout",
@@ -602,6 +605,9 @@ const dict = {
       emptyText: "Add a few pieces before proceeding to checkout.",
     },
     editorial: { label: "Spring/Summer 27 campaign", cta: "Shop the look" },
+    stories: { label: "The capsule in 5 pieces", names: { "portofino-striped-polo": "Polo", "amalfi-striped-linen-shirt": "Shirt", "sorrento-linen-sweater": "Sweater", "riviera-cotton-cap": "Cap", "capri-braided-bracelet": "Bracelet" } },
+    share: { cta: "Share", copied: "Link copied", text: "Have a look at this MERIDIA piece" },
+    heroQuiz: "Find your style in 30 s",
     manifesto: {
       label: "The manifesto",
       lines: ["Buy less.", "Choose better.", "Wear it longer."],
@@ -723,7 +729,7 @@ const dict = {
       later: "Later",
       copy: "Copy",
       copied: "Copied",
-      float: "Scratch & win",
+      float: "Scratch your gift",
       expires: "expires in",
       close: "Close",
     },

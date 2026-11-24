@@ -11,10 +11,11 @@ import { ButtonLink } from "@/components/ui/Button";
 import { CrestMedallion } from "@/components/brand/CrestMedallion";
 
 const DISMISS_KEY = "meridia:scratch-dismissed";
+const VIEWS_KEY = "meridia:page-views";
 const BRUSH = 24;
 const REVEAL_AT = 0.45;
 
-/** Opens the scratch card automatically once, a few seconds into the first visit. */
+/** Opens the scratch card once per visit, after the visitor shows interest (scroll, second page or 25 s). */
 export function ScratchAutoOpen() {
   const { openModal } = useUI();
   const { played } = useReward();
@@ -29,8 +30,32 @@ export function ScratchAutoOpen() {
       /* ignore */
     }
     if (dismissed) return;
-    const id = window.setTimeout(() => openModal("scratch"), 4500);
-    return () => window.clearTimeout(id);
+
+    // Show the gift only once the visitor is engaged — never as an interruption on arrival
+    // (better experience, and Google discourages intrusive interstitials on mobile).
+    let views = 1;
+    try {
+      views = Number(window.sessionStorage.getItem(VIEWS_KEY) ?? "0") + 1;
+      window.sessionStorage.setItem(VIEWS_KEY, String(views));
+    } catch {
+      /* ignore */
+    }
+    let done = false;
+    const show = () => {
+      if (done) return;
+      done = true;
+      openModal("scratch");
+    };
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max > 0 && window.scrollY / max > 0.4) show();
+    };
+    const timers = [window.setTimeout(show, views >= 2 ? 2500 : 25000)];
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      timers.forEach((t) => window.clearTimeout(t));
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [played, pathname, openModal]);
 
   return null;

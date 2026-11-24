@@ -70,7 +70,10 @@ export function ProductCard({
               src={color.images?.[1]}
               alt=""
               tone={color.hex}
-              model={{ outfit: productOutfit(product, color), shot: detailShot(product) }}
+              // With a real photo up front, hover shows the flat product drawing; otherwise the worn illustration.
+              art={product.art}
+              stripe={color.stripe}
+              model={color.images?.length ? undefined : { outfit: productOutfit(product, color), shot: detailShot(product) }}
               variant={2}
               monogram={false}
               className="transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"

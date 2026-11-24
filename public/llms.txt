@@ -1,0 +1,27 @@
+# MERIDIA
+
+> MERIDIA is a concept European menswear brand (business casual, quiet luxury), created as a
+> university project. The online store is a demonstration: no real orders, payments or shipments.
+> Brand line: "European sensibility. Timeless design. Everyday sophistication."
+
+## The collection (Spring/Summer 27 capsule, prices in EUR)
+- Portofino Striped Polo — knitted cotton polo, navy/cream stripes — 89 €
+- Amalfi Striped Linen Shirt — washed European linen, fine stripe — 119 €
+- Sorrento Linen Sweater — open-knit linen and cotton crewneck — 149 €
+- Riviera Cotton Cap — washed cotton twill, six panels, no logo — 45 €
+- Capri Braided Bracelet — hand-braided waxed cord, brass clasp — 59 €
+
+## Store policies (as shown on the site)
+- Free standard shipping over 149 €, otherwise 6.90 €; express 14.90 €
+- Delivery estimate: 2–4 working days in Italy, 3–6 across Europe
+- Free returns within 14 days of delivery
+- Multi-piece discount: 10% off with 2 pieces, 15% off with 3 or more
+- Sizes XS–XL; the size guide includes measurements and a size finder
+- Languages: Italian (default) and English
+
+## Key pages
+- Shop: https://romeoalessandro2712-crypto.github.io/Merida/shop/
+- Style quiz: https://romeoalessandro2712-crypto.github.io/Merida/quiz/
+- FAQ: https://romeoalessandro2712-crypto.github.io/Merida/info/faq/
+- Shipping: https://romeoalessandro2712-crypto.github.io/Merida/info/shipping/
+- Returns: https://romeoalessandro2712-crypto.github.io/Merida/info/returns/

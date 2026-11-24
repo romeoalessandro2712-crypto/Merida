@@ -10,7 +10,8 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   if (!INFO_PAGE_SLUGS.includes(slug as InfoPageSlug)) return {};
-  return { title: getDictionary("en").pages[slug as InfoPageSlug].title };
+  const page = getDictionary("it").pages[slug as InfoPageSlug];
+  return { title: page.title, description: page.body[0].slice(0, 158) };
 }
 
 export default async function InfoPage({ params }: { params: Promise<{ slug: string }> }) {

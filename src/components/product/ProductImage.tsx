@@ -95,13 +95,13 @@ export function ProductImage({
       {src ? (
         <Image src={asset(src)} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
       ) : model ? (
-        <div role="img" aria-label={alt} className="absolute inset-0" style={{ background: STUDIO[variant % STUDIO.length] }}>
+        <div role={alt ? "img" : undefined} aria-label={alt || undefined} aria-hidden={alt ? undefined : true} className="absolute inset-0" style={{ background: STUDIO[variant % STUDIO.length] }}>
           <svg viewBox={SHOTS[model.shot]} preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full" aria-hidden="true">
             <Figure outfit={model.outfit} id={uid} />
           </svg>
         </div>
       ) : art ? (
-        <div role="img" aria-label={alt} className="absolute inset-0" style={{ background: STUDIO[variant % STUDIO.length] }}>
+        <div role={alt ? "img" : undefined} aria-label={alt || undefined} aria-hidden={alt ? undefined : true} className="absolute inset-0" style={{ background: STUDIO[variant % STUDIO.length] }}>
           <svg viewBox="0 0 200 250" preserveAspectRatio="xMidYMid meet" className="absolute inset-0 h-full w-full" aria-hidden="true">
             <defs>
               <radialGradient id={`${uid}-floor`}>
@@ -117,8 +117,9 @@ export function ProductImage({
         </div>
       ) : (
         <div
-          role="img"
-          aria-label={alt}
+          role={alt ? "img" : undefined}
+          aria-label={alt || undefined}
+          aria-hidden={alt ? undefined : true}
           className="absolute inset-0"
           style={placeholderStyle(tone, variant)}
         >

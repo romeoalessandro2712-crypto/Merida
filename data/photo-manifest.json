@@ -1,4 +1,28 @@
 {
-  "products": {},
-  "editorial": []
+  "products": {
+    "amalfi-striped-linen-shirt": {
+      "sky": [
+        "/products/amalfi-striped-linen-shirt/sky-1.jpg"
+      ]
+    },
+    "capri-braided-bracelet": {
+      "chocolate": [
+        "/products/capri-braided-bracelet/chocolate-1.jpg"
+      ]
+    },
+    "portofino-striped-polo": {
+      "navy": [
+        "/products/portofino-striped-polo/navy-1.jpg"
+      ]
+    },
+    "sorrento-linen-sweater": {
+      "cream": [
+        "/products/sorrento-linen-sweater/cream-1.jpg"
+      ]
+    }
+  },
+  "editorial": [
+    "/editorial/1-studio.jpg",
+    "/editorial/2-interior.jpg"
+  ]
 }

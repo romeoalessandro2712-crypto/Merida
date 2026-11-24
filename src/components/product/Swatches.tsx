@@ -37,7 +37,8 @@ export function Swatches({
               onChange(c.id);
             }}
             className={cn(
-              "rounded-full border p-[2px] transition-colors",
+              "flex items-center justify-center rounded-full border transition-colors",
+              size === "sm" ? "h-6 w-6" : "h-8 w-8",
               selected ? "border-navy" : "border-transparent hover:border-taupe",
             )}
           >

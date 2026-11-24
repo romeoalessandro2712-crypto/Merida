@@ -18,8 +18,7 @@ export function LanguageSwitcher({ className, light }: { className?: string; lig
               aria-pressed={locale === l}
               className={cn(
                 "px-0.5 transition-colors",
-                locale === l ? (light ? "text-cream" : "text-navy") : "text-taupe hover:text-navy",
-                light && locale !== l && "hover:text-cream",
+                locale === l ? (light ? "text-cream" : "text-navy") : light ? "text-cream/70 hover:text-cream" : "text-taupe hover:text-navy",
               )}
             >
               {l.toUpperCase()}

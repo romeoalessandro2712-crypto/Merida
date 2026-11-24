@@ -18,6 +18,8 @@ import { TabNudge } from "@/components/engage/TabNudge";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { RouteCurtain } from "@/components/layout/RouteCurtain";
 import { Intro } from "@/components/layout/Intro";
+import { siteUrl } from "@/lib/site";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -33,19 +35,32 @@ const inter = Inter({
   display: "swap",
 });
 
+const OG_IMAGE = { url: siteUrl("editorial/1-studio.jpg"), width: 1152, height: 2048, alt: "MERIDIA — campagna Primavera/Estate 27" };
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: {
-    default: "MERIDIA — European sensibility. Timeless design. Everyday sophistication.",
+    default: "MERIDIA — Sensibilità europea. Design senza tempo.",
     template: "%s · MERIDIA",
   },
   description:
-    "MERIDIA is a concept European accessible-premium clothing brand: business casual essentials with a quiet, timeless sensibility. Spring/Summer 27 capsule available now.",
+    "MERIDIA: capsule di abbigliamento uomo dal gusto europeo. Polo a righe, camicia in lino, maglia di lino, cappello e bracciale in fibre naturali. Spedizione gratuita sopra i 149 €, reso gratuito in 14 giorni.",
+  alternates: { canonical: siteUrl() },
   openGraph: {
-    title: "MERIDIA",
-    description: "European sensibility. Timeless design. Everyday sophistication.",
+    title: "MERIDIA — Sensibilità europea. Design senza tempo.",
+    description: "Una capsule di cinque pezzi essenziali in fibre naturali, disegnata in Europa. Primavera/Estate 27.",
+    url: siteUrl(),
+    siteName: "MERIDIA",
     type: "website",
     locale: "it_IT",
     alternateLocale: ["en_GB"],
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MERIDIA — Sensibilità europea. Design senza tempo.",
+    description: "Una capsule di cinque pezzi essenziali in fibre naturali, disegnata in Europa.",
+    images: [OG_IMAGE.url],
   },
 };
 
@@ -68,6 +83,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <JsonLd
+          data={[
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "MERIDIA",
+              url: siteUrl(),
+              logo: siteUrl("brand/meridia-crest-600.jpg"),
+              slogan: "European sensibility. Timeless design. Everyday sophistication.",
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "MERIDIA",
+              url: siteUrl(),
+              inLanguage: ["it-IT", "en-GB"],
+            },
+          ]}
+        />
         <Intro />
         <Providers>
           <SkipLink />
